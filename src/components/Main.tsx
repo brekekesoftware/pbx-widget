@@ -5,7 +5,7 @@ import { authState } from '@/state/authState';
 import { onNumberEntry } from '@/utils/events/listeners';
 import { fireMakeCallEvent, fireNumberEntryEvent } from '@/utils/events/triggers';
 import { useObserver } from 'mobx-react';
-import { useCallback, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import ActiveCalls from './ActiveCalls';
 import { callsState } from '@/state/callsState';
 import Keypad from './Keypad';
@@ -24,6 +24,13 @@ const Main = () => {
 
   const account = useObserver(() => authState.account);
 
+  const call = useCallback((number: string) => pbx.call(number), []);
+
+  const submit = useCallback((event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    call(value);
+  }, [call, value]);
+
   return (
     <div>
       <div className='bg-white h-10 flex items-center p-2.5 border-b justify-between'>
@@ -41,22 +48,22 @@ const Main = () => {
       <div className="flex flex-col relative bg-gray-100/75" style={{ height: '450px' }}>
         <ActiveCalls state={callsState} />
         <CallLog />
-        <div className="flex gap-2 py-1 p-2 mt-auto items-center border-t">
+        <form className="flex gap-2 py-1 p-2 mt-auto items-center border-t" onSubmit={submit}>
           <input
             value={value}
             onChange={(event) => setValue(event.target.value)}
             className="w-full rounded border h-8 font-bold px-2"
           />
-          <button onClick={open}>
+          <button onClick={open} type='button'>
             <img className="h-10 w-10" src={KeypadIcon} alt="keypad" />
           </button>
-        </div>
+        </form>
         <Keypad
           number={value}
           onNumberChange={setValue}
           close={close}
           show={isOpen}
-          call={number => pbx.call(number)}
+          call={call}
         />
       </div>
     </div>
