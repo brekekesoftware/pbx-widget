@@ -1,13 +1,9 @@
 import Logo from '@/assets/images/logo.png';
-import { AuthCallback, pbx } from '@/services/pbx';
+import { pbx } from '@/services/pbx';
 import { AuthData } from '@/types/app';
 import { FC, FormEventHandler, useState } from 'react';
 
-interface Props {
-  callback: AuthCallback;
-}
-
-const Auth: FC<Props> = ({ callback }) => {
+const Auth = () => {
   const [data, setData] = useState<AuthData>(getSavedData);
   const [shouldSave, setShouldSave] = useState<boolean>(true);
 
@@ -17,7 +13,7 @@ const Auth: FC<Props> = ({ callback }) => {
 
   const login: FormEventHandler = (e) => {
     e.preventDefault();
-    void pbx.connect({ ...data, callback });
+    void pbx.connect(data);
     if (!shouldSave) return;
     saveData(data);
   };

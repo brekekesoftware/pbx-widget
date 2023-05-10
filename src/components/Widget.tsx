@@ -10,14 +10,13 @@ import { RecoilRoot } from 'recoil';
 configure({ isolateGlobalState: true });
 
 const Widget = () => {
-  const [_, setLoggedIn] = useState(false);
   const loggedIn = useObserver(() => authState.loggedIn);
 
   return (
     <RecoilRoot>
       <div className='w-widget border rounded shadow m-2'>
         <div id="webphone_embed" style={{ display: 'none' }} />
-        {!loggedIn && <Auth callback={setLoggedIn} />}
+        {!loggedIn && <Auth />}
         {loggedIn && <Main />}
       </div>
     </RecoilRoot>
