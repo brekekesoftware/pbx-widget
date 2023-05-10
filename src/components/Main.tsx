@@ -46,7 +46,7 @@ const Main = () => {
         </div>
       </div>
       <div className="flex flex-col relative bg-gray-100/75" style={{ height: '450px' }}>
-        <ActiveCalls state={callsState} />
+        <ActiveCalls />
         <CallLog />
         <form className="flex gap-2 py-1 p-2 mt-auto items-center border-t" onSubmit={submit}>
           <input
