@@ -28,6 +28,7 @@ export class CallsState {
       inactiveCalls: computed,
       addCall: action,
       endCall: action,
+      reset: action,
     });
 
     onCallEvent(e => this.addCall(e.call));
@@ -41,6 +42,11 @@ export class CallsState {
 
   endCall = (call: Call) => {
     this.callsEndedTime[call.id] = Date.now();
+  }
+
+  reset = () => {
+    this.callsRecord = {};
+    this.callsEndedTime = {};
   }
 }
 

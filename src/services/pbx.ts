@@ -95,6 +95,7 @@ export class PBX {
 
   disconnect = () => {
     authState.logout();
+    callsState.reset();
     this.phone?.cleanup();
     this.phone = undefined;
     this.pal = undefined;
