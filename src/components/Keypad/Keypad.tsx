@@ -1,4 +1,4 @@
-import { FC, Fragment, useCallback } from "react";
+import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import Button from "./Button";
 import { fireMakeCallEvent } from "@/utils/events/triggers";
 import { BackspaceIcon, PhoneIcon } from "@heroicons/react/24/solid";
@@ -12,15 +12,46 @@ const keyRows = [
 ];
 
 interface Props {
-  inputKey: (key: string) => void;
-  backspace: () => void;
-  close: () => void;
-  value: string;
   show: boolean;
+  close: () => void;
+  title?: string;
+  number?: string;
+  onNumberChange?: (value: string) => void;
+  onKeyInput?: (key: string) => void;
   call: (number: string) => void;
 }
 
-const Keypad: FC<Props> = ({ inputKey, value, backspace, show, close, call }) => {
+const Keypad: FC<Props> = ({ number, onNumberChange, title, onKeyInput, show, close, call }) => {
+  const [value, setValue] = useState(number || '');
+
+  useEffect(() => setValue(number || ''), [number]);
+
+  const backspace = () => {
+    if (value === '') return;
+    // fireNumberEntryEvent(value.slice(0, value.length - 1));
+    setValue(prevState => {
+      if (prevState.length > 0) {
+        const state = prevState.slice(0, prevState.length - 1);
+        onNumberChange?.(state);
+        return state;
+      }
+      return '';
+    });
+  };
+
+  const inputKey = useCallback(
+    (key: string) => {
+      // fireNumberEntryEvent(value + key);
+      setValue(prevState => {
+        const state = prevState + key;
+        onNumberChange?.(state);
+        return state;
+      });
+      onKeyInput?.(key);
+    },
+    [value, onKeyInput],
+  );
+
   const renderKey = useCallback(
     (key: string) => <Button key={key} value={key} onClick={() => inputKey(key)} />,
     [inputKey]
@@ -52,14 +83,18 @@ const Keypad: FC<Props> = ({ inputKey, value, backspace, show, close, call }) =>
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="bg-white absolute inset-x-0 bottom-0 p-2 rounded-sm">
-            <input disabled value={value} className="w-full disabled:bg-transparent border text-xl text-center rounded font-bold px-2 py-1" />
+          <div className="bg-white absolute z-50 inset-x-0 bottom-0 p-2 rounded-sm">
+            {title && <div className='text-center text-sm uppercase tracking-wide ml-1'>{title}</div>}
+            <input disabled value={value} className="w-full disabled:bg-transparent border text-xl text-center rounded font-bold tracking-widest px-2 py-1" />
             <div className="w-full mt-2 text-xl grid grid-cols-3 gap-1">
               {keyRows.map(renderRow)}
               <div className="col-start-2 flex items-center justify-center">
                 <button
                   className="h-12 w-12 rounded-full bg-app font-bold flex items-center justify-center"
-                  onClick={() => call(value)}
+                  onClick={() => {
+                    close();
+                    call(value);
+                  }}
                 >
                   <PhoneIcon className="text-white h-6 w-6" />
                 </button>

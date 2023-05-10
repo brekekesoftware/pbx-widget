@@ -19,25 +19,6 @@ const Main = () => {
 
   useEffect(() => onNumberEntry((e) => setValue(e.number)), []);
 
-  const backspace = () => {
-    if (value === '') return;
-    // fireNumberEntryEvent(value.slice(0, value.length - 1));
-    setValue(prevState => {
-      if (prevState.length > 0) {
-        return prevState.slice(0, prevState.length - 1);
-      }
-      return '';
-    });
-  };
-
-  const inputKey = useCallback(
-    (key: string) => {
-      // fireNumberEntryEvent(value + key);
-      setValue(prevState => prevState + key);
-    },
-    [value],
-  );
-
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
 
@@ -71,9 +52,8 @@ const Main = () => {
           </button>
         </div>
         <Keypad
-          backspace={backspace}
-          inputKey={inputKey}
-          value={value}
+          number={value}
+          onNumberChange={setValue}
           close={close}
           show={isOpen}
           call={number => pbx.call(number)}
