@@ -1,4 +1,5 @@
 import { Account } from '@/types/phone';
+import { fireLoggedInEvent, fireLoggedOutEvent } from '@/utils/events/triggers';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 export class AuthState {
@@ -19,10 +20,12 @@ export class AuthState {
 
   login = (account: Account) => {
     this.account = account;
+    fireLoggedInEvent();
   }
 
   logout = () => {
     this.account = undefined;
+    fireLoggedOutEvent();
   }
 }
 

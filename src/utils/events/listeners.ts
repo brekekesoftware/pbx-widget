@@ -8,3 +8,6 @@ export const onMakeCallEvent = (callback: GlobalEventCallback<'make-call'>) => o
 export const onCallEvent = (callback: GlobalEventCallback<'call'>) => onEvent('call', callback);
 export const onCallUpdatedEvent = (callback: GlobalEventCallback<'call-updated'>) => onEvent('call-updated', callback);
 export const onCallEndedEvent = (callback: GlobalEventCallback<'call-ended'>) => onEvent('call-ended', callback);
+
+export const onLoggedInEvent = (callback: GlobalEventCallback<'logged-in'>) => onEvent('logged-in', callback);
+export const onLoggedOutEvent = (callback: GlobalEventCallback<'logged-out'>) => onEvent('logged-out', callback);
