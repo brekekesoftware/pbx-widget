@@ -1,7 +1,7 @@
 import Logo from '@/assets/images/logo.png';
 import { pbx } from '@/services/pbx';
 import { AuthData } from '@/types/app';
-import { FC, FormEventHandler, useState } from 'react';
+import { FormEventHandler, useState } from 'react';
 
 const Auth = () => {
   const [data, setData] = useState<AuthData>(getSavedData);
@@ -28,6 +28,7 @@ const Auth = () => {
           type="text"
           value={data.user}
           placeholder="Username"
+          autoComplete='username'
           className='w-full rounded border border-gray-300 p-2 py-1'
           onChange={event => updateData('user', event.target.value)}
         />
@@ -36,6 +37,7 @@ const Auth = () => {
           type="password"
           value={data.password}
           placeholder="Password"
+          autoComplete='current-password'
           onChange={event => updateData('password', event.target.value)}
         />
         <input
