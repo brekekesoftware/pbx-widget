@@ -32,8 +32,8 @@ const Main = () => {
   }, [call, value]);
 
   return (
-    <div>
-      <div className='bg-white h-10 flex items-center p-2.5 border-b justify-between'>
+    <>
+      <div className='bg-white h-10 flex items-center p-2.5 border-b justify-between z-50'>
         <img className='h-5' src={Logo} alt="" />
         <div className="flex gap-2 items-center">
           <div className="flex items-center rounded-full bg-gray-200 p-0.5 pl-2">
@@ -45,28 +45,26 @@ const Main = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col relative bg-gray-100/75" style={{ height: '450px' }}>
-        <ActiveCalls />
-        <CallLog />
-        <form className="flex gap-2 py-1 p-2 mt-auto items-center border-t" onSubmit={submit}>
-          <input
-            value={value}
-            onChange={(event) => setValue(event.target.value)}
-            className="w-full rounded border h-8 font-bold px-2"
-          />
-          <button onClick={open} type='button'>
-            <img className="h-10 w-10" src={KeypadIcon} alt="keypad" />
-          </button>
-        </form>
-        <Keypad
-          number={value}
-          onNumberChange={setValue}
-          close={close}
-          show={isOpen}
-          call={call}
+      <ActiveCalls />
+      <CallLog />
+      <form className="flex gap-2 py-1 p-2 items-center border-t absolute bottom-0 inset-x-0" onSubmit={submit}>
+        <input
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          className="w-full rounded border h-8 font-bold px-2"
         />
-      </div>
-    </div>
+        <button onClick={open} type='button'>
+          <img className="h-10 w-10" src={KeypadIcon} alt="keypad" />
+        </button>
+      </form>
+      <Keypad
+        number={value}
+        onNumberChange={setValue}
+        close={close}
+        show={isOpen}
+        call={call}
+      />
+    </>
   );
 };
 

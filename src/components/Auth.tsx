@@ -23,7 +23,7 @@ const Auth = () => {
       <div className='bg-white h-10 flex items-center p-2.5 border-b'>
         <img className='h-5' src={Logo} alt="" />
       </div>
-      <form onSubmit={login} className='space-y-2 p-2 pb-6 bg-gray-100/75'>
+      <form onSubmit={login} className='space-y-2 p-2 pb-6'>
         <input
           type="text"
           value={data.user}

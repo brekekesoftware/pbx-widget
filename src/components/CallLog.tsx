@@ -31,7 +31,7 @@ const CallLog = () => {
   }
 
   return (
-    <div className='overflow-auto'>
+    <div className='overflow-auto mb-12'>
       <p className='p-2 font-bold text-sm border-b sticky top-0 bg-gray-100'>
         Calls ({calls.length})
       </p>
