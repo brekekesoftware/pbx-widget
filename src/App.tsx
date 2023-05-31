@@ -7,11 +7,15 @@ import reactLogo from './assets/react.svg';
 function App() {
   const [count, setCount] = useState(0);
 
-  return (
-    <div className="App">
-      <Widget />
-    </div>
-  )
+  const env = import.meta.env;
+  const nodeEnv = process.env.NODE_ENV;
+
+  console.log({
+    env,
+    nodeEnv,
+  });
+
+  return <Widget />;
 }
 
 export default App
