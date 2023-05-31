@@ -6,90 +6,109 @@ import {
 } from '@/utils/events/listeners';
 import { fireCallInfoEvent, fireLogSavedEvent, fireMakeCallEvent } from '@/utils/events/triggers';
 
-// add click-to-call listener
-sforce.opencti.onClickToDial({
-  listener: (payload) => {
-    console.log('clickToDial', payload);
-    fireMakeCallEvent(String(payload.number));
-  },
-});
+const setupOpenCti = () => {
+  return new Promise<void>((resolve) => {
+    const salesForceHost = document.location.ancestorOrigins[0];
+    const scriptSrc = `${salesForceHost}/support/api/57.0/lightning/opencti_min.js`;
 
-sforce.opencti.onNavigationChange({
-  listener: (payload) => {
-    console.log('onNavigationChange', payload);
-  },
-});
+    // load salesforce opencti script
+    const script = document.createElement('script');
+    script.src = scriptSrc;
+    script.onload = () => {
+      console.log('opencti ready');
+      resolve();
+    };
 
-onLoggedInEvent(() => {
-  sforce.opencti.enableClickToDial({ callback: () => console.log('enableClickToDial') });
-});
+    document.head.appendChild(script);
+  });
+};
 
-onLoggedOutEvent(() => {
-  sforce.opencti.disableClickToDial({ callback: () => console.log('disableClickToDial') });
-});
-
-onCallEvent(({ call }) => {
-  console.log('xxx onCallEvent', call);
-  sforce.opencti.searchAndScreenPop({
-    searchParams: call.partyNumber,
-    deferred: false,
-    callType: call.incoming ? sforce.opencti.CALL_TYPE.INBOUND : sforce.opencti.CALL_TYPE.OUTBOUND,
-    // callType: sforce.opencti.CALL_TYPE.INTERNAL,
-    defaultFieldValues: {
-      Phone: call.partyNumber,
-      // MobilePhone: call.partyNumber,
-      // FirstName: call.getDisplayName(),
-    },
-    callback: response => {
-      console.log('searchAndScreenPop', response);
-      if (response.success && Object.keys(response.returnValue!).length === 1) {
-        const recordId = Object.keys(response.returnValue!)[0];
-
-        const record = response.returnValue![recordId];
-
-        fireCallInfoEvent(call, {
-          id: record.Id,
-          name: `[${record.RecordType}] ${record.Name}`,
-        });
-
-        // sforce.opencti.screenPop({
-        //   type: sforce.opencti.SCREENPOP_TYPE.SOBJECT,
-        //   params: {
-        //     recordId,
-        //     recordName: response.returnValue![recordId],
-        //     objectType: 'Contact',
-        //   },
-        // });
-      }
+setupOpenCti().then(() => {
+  // add click-to-call listener
+  sforce.opencti.onClickToDial({
+    listener: (payload) => {
+      console.log('clickToDial', payload);
+      fireMakeCallEvent(String(payload.number));
     },
   });
-});
 
-onLogEvent(({ log }) => {
-  console.log('logEvent', log);
-  const call = log.call;
-  sforce.opencti.saveLog({
-    value: {
-      Subject: log.subject,
-      Status: 'completed',
-      CallType: call.incoming ? 'Inbound' : 'Outbound',
-      // ActivityDate: formatDate(new Date(call.createdAt)),
-      CallObject: `${log.tenant} ${call.id}.${call.createdAt} ${log.user}`,
-      Phone: call.partyNumber,
-      Description: log.result,
-      CallDisposition: log.result,
-      CallDurationInSeconds: call.getDuration() / 1000,
-      WhoId: log.recordId,
-      WhatId: log.relatedRecordId,
-      entityApiName: 'Task',
+  sforce.opencti.onNavigationChange({
+    listener: (payload) => {
+      console.log('onNavigationChange', payload);
     },
-    callback: (response) => {
-      console.log('saveLog response', response);
-      if (response.success) {
-        fireLogSavedEvent(log);
-        sforce.opencti.refreshView();
-      }
-    },
+  });
+
+  onLoggedInEvent(() => {
+    sforce.opencti.enableClickToDial({ callback: () => console.log('enableClickToDial') });
+  });
+
+  onLoggedOutEvent(() => {
+    sforce.opencti.disableClickToDial({ callback: () => console.log('disableClickToDial') });
+  });
+
+  onCallEvent(({ call }) => {
+    console.log('xxx onCallEvent', call);
+    sforce.opencti.searchAndScreenPop({
+      searchParams: call.partyNumber,
+      deferred: false,
+      callType: call.incoming ? sforce.opencti.CALL_TYPE.INBOUND : sforce.opencti.CALL_TYPE.OUTBOUND,
+      // callType: sforce.opencti.CALL_TYPE.INTERNAL,
+      defaultFieldValues: {
+        Phone: call.partyNumber,
+        // MobilePhone: call.partyNumber,
+        // FirstName: call.getDisplayName(),
+      },
+      callback: response => {
+        console.log('searchAndScreenPop', response);
+        if (response.success && Object.keys(response.returnValue!).length === 1) {
+          const recordId = Object.keys(response.returnValue!)[0];
+
+          const record = response.returnValue![recordId];
+
+          fireCallInfoEvent(call, {
+            id: record.Id,
+            name: `[${record.RecordType}] ${record.Name}`,
+          });
+
+          // sforce.opencti.screenPop({
+          //   type: sforce.opencti.SCREENPOP_TYPE.SOBJECT,
+          //   params: {
+          //     recordId,
+          //     recordName: response.returnValue![recordId],
+          //     objectType: 'Contact',
+          //   },
+          // });
+        }
+      },
+    });
+  });
+
+  onLogEvent(({ log }) => {
+    console.log('logEvent', log);
+    const call = log.call;
+    sforce.opencti.saveLog({
+      value: {
+        Subject: log.subject,
+        Status: 'completed',
+        CallType: call.incoming ? 'Inbound' : 'Outbound',
+        // ActivityDate: formatDate(new Date(call.createdAt)),
+        CallObject: `${log.tenant} ${call.id}.${call.createdAt} ${log.user}`,
+        Phone: call.partyNumber,
+        Description: log.result,
+        CallDisposition: log.result,
+        CallDurationInSeconds: call.getDuration() / 1000,
+        WhoId: log.recordId,
+        WhatId: log.relatedRecordId,
+        entityApiName: 'Task',
+      },
+      callback: (response) => {
+        console.log('saveLog response', response);
+        if (response.success) {
+          fireLogSavedEvent(log);
+          sforce.opencti.refreshView();
+        }
+      },
+    });
   });
 });
 
