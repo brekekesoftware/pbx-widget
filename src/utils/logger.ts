@@ -1,5 +1,5 @@
+import { whenDev } from '@/utils/app';
+
 export const logger = (...args: any[]) => {
-  if (process.env.NODE_ENV === 'development') {
-    console.log('pbx-widget', ...args)
-  }
+  whenDev(() => console.log('pbx-widget', ...args));
 }
