@@ -21,10 +21,15 @@ const CallLog = () => {
   }
 
   const renderCall = (call: Call) => {
+    const displayName = callsState.displayName(call);
+
     return (
       <div key={call.id} className='bg-white p-1.5 flex justify-between'>
         <div>
-          <p className='font-bold text-sm'>{call.getDisplayName()}</p>
+          <p className='font-bold text-sm'>
+            {displayName ?? call.getDisplayName()}
+            {displayName && <span className='font-normal text-xs ml-2'>({call.partyNumber})</span>}
+          </p>
           <span className='text-xs'>
           {callStatus(call)}
         </span>

@@ -94,7 +94,7 @@ setupOpenCti().then(() => {
         // ActivityDate: formatDate(new Date(call.createdAt)),
         CallObject: `${log.tenant} ${call.id}.${call.createdAt} ${log.user}`,
         Phone: call.partyNumber,
-        Description: log.result,
+        Description: log.comment,
         CallDisposition: log.result,
         CallDurationInSeconds: call.getDuration() / 1000,
         WhoId: log.recordId,

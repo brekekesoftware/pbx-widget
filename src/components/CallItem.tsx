@@ -98,6 +98,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
         <div className='grow'>
           <div className='font-bold'>
             {displayName ?? call.getDisplayName()}
+            {displayName && <span className='ml-2 text-xs font-normal'>({call.partyNumber})</span>}
           </div>
           {renderStatus()}
         </div>

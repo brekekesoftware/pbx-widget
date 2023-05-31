@@ -91,6 +91,7 @@ export class LogState {
 
   reset = () => {
     this.callsLog = {};
+    this.savedLogs = {};
     this.current = undefined;
   }
 }
