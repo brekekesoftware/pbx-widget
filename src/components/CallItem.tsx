@@ -1,5 +1,7 @@
 import Keypad from '@/components/Keypad';
 import { pbx } from '@/services/pbx';
+import { logState } from '@/state/atoms/logState';
+import { callsState } from '@/state/callsState';
 import { Call } from '@/types/phone';
 import { PhoneIcon, PhoneXMarkIcon } from '@heroicons/react/24/solid';
 import { autorun } from 'mobx';
@@ -10,6 +12,9 @@ import AttendedTransferIcon from '@/assets/icons/attended-transfer.svg';
 import BlindTransferIcon from '@/assets/icons/blind-transfer.svg';
 import MicIcon from '@/assets/icons/mic.svg';
 import MicOffIcon from '@/assets/icons/mic-off.svg';
+import PauseIcon from '@/assets/icons/pause.svg';
+import PlayIcon from '@/assets/icons/play.svg';
+import NoteIcon from '@/assets/icons/note.svg';
 
 interface Props {
   call: Call;
@@ -24,6 +29,8 @@ const CallItem: FC<Props> = observer(({ call }) => {
   const [muted, setMuted] = useState(call.muted);
   const [recording, setRecording] = useState(call.recording);
   const [answered, setAnswered] = useState(call.answered);
+
+  const displayName = useObserver(() => callsState.displayName(call));
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -77,13 +84,21 @@ const CallItem: FC<Props> = observer(({ call }) => {
         </span>
       );
 
-      return <Duration getDuration={call.getDuration} />;
+      return (
+        <span className='text-xs'>
+          <Duration getDuration={call.getDuration} />
+          {call.holding && <span className='ml-2 font-bold'>On Hold</span>}
+          {call.muted && <span className='ml-2 font-bold'>Muted</span>}
+        </span>
+      );
     }
 
     return (
       <div className='flex gap-2 p-2 items-center'>
         <div className='grow'>
-          <div className='font-bold'>{call.getDisplayName()}</div>
+          <div className='font-bold'>
+            {displayName ?? call.getDisplayName()}
+          </div>
           {renderStatus()}
         </div>
         {renderAnswer()}
@@ -115,19 +130,22 @@ const CallItem: FC<Props> = observer(({ call }) => {
     return (
       <div className="flex gap-2 justify-around px-4 pb-1">
         <button onClick={() => call.toggleHoldWithCheck()} title={holding ? 'unhold' : 'hold'}>
-          {holding ? 'unhold' : 'hold'}
+          <img className='h-5 w-5' src={holding ? PlayIcon : PauseIcon} alt={holding ? 'unhold' : 'hold'} />
         </button>
         <button className='h-6 w-6' onClick={() => call.toggleMuted()} title={muted ? 'unmute' : 'mute'}>
           <img className='h-5 w-5' src={muted ? MicIcon : MicOffIcon} alt={muted ? 'unmute' : 'mute'} />
         </button>
-        <button onClick={() => call.toggleRecording()}>
-          {recording ? 'stop recording' : 'record'}
-        </button>
+        {/*<button onClick={() => call.toggleRecording()}>*/}
+        {/*  {recording ? 'stop recording' : 'record'}*/}
+        {/*</button>*/}
         <button onClick={() => open()} title='Attended transfer'>
           <img src={AttendedTransferIcon} alt="attended transfer" />
         </button>
         <button onClick={() => open(true)} title='Blind transfer'>
           <img className='h-6 w-6' src={BlindTransferIcon} alt="blind transfer" />
+        </button>
+        <button onClick={() => logState.open(call)} title='Note'>
+          <img className='h-6 w-6' src={NoteIcon} alt="note" />
         </button>
       </div>
     );

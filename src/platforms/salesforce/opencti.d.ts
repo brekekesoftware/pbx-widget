@@ -7,10 +7,18 @@ interface CallbackResponse<T> {
   errors?: string[];
 }
 
+type SearchResult = {
+  Id: string;
+  Name: string;
+  RecordType: string;
+}
+
 interface CallbackResponses {
   toggleClickToDial: CallbackResponse<null>;
+  refreshView: CallbackResponse<null>;
   runApex: CallbackResponse<{ runApex: string }>;
   saveLog: CallbackResponse<string | null>;
+  searchAndScreenPop: CallbackResponse<Record<string, SearchResult>>;
 }
 
 interface PayloadTypes {
@@ -23,6 +31,15 @@ interface PayloadTypes {
     contactId?: string;
     personAccount?: boolean;
     params?: string;
+  };
+  onNavigationChange: {
+    url: string;
+    recordId: string;
+    recordName: string;
+    objectType: string;
+    accountId?: string;
+    contactId?: string;
+    personAccount?: boolean;
   }
 }
 
@@ -30,6 +47,7 @@ interface OpenCTI {
   disableClickToDial: (params: { callback: Callback<CallbackResponses['toggleClickToDial']> }) => void;
   enableClickToDial: (params: { callback: Callback<CallbackResponses['toggleClickToDial']> }) => void;
   onClickToDial: (params: { listener: Listener<PayloadTypes['onClickToDial']> }) => void;
+  onNavigationChange: (params: { listener: Listener<PayloadTypes['onNavigationChange']> }) => void;
   runApex: (params: {
     apexClass: string;
     methodName: string;
@@ -37,9 +55,10 @@ interface OpenCTI {
     callback: Callback<CallbackResponses['runApex']>
   }) => void;
   saveLog: (params: {
-    value: {};
+    value: Record<string, string | number | undefined>;
     callback: Callback<CallbackResponses['saveLog']>
   }) => void;
+  refreshView: (params?: { callback?: Callback<CallbackResponses['refreshView']> }) => void;
   screenPop: (params: {
     type: keyof OpenCTI['SCREENPOP_TYPE'];
     params: {}; // TODO
@@ -52,6 +71,20 @@ interface OpenCTI {
     SEARCH: string;
     NEW_RECORD_MODAL: string;
     FLOW: string;
+  };
+  searchAndScreenPop: (params: {
+    searchParams: string;
+    queryParams?: string;
+    params?: Record<string, unknown>; // TODO
+    defaultFieldValues?: Record<string, string>;
+    deferred?: boolean;
+    callback: Callback<CallbackResponses['searchAndScreenPop']>
+    callType: keyof OpenCTI['CALL_TYPE'] | string
+  }) => void;
+  CALL_TYPE: {
+    INBOUND: string;
+    OUTBOUND: string;
+    INTERNAL: string;
   };
 }
 

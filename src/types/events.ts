@@ -46,7 +46,45 @@ type GlobalEventsMap = {
     },
     result: boolean | void,
   },
+  'call-info': {
+    parameters: [call: Call, info: CallInfo],
+    details: {
+      call: Call,
+      info: CallInfo,
+    },
+    result: boolean | void,
+  },
+  log: {
+    parameters: [log: Log],
+    details: {
+      log: Log,
+    },
+    result: boolean | void,
+  },
+  'log-saved': {
+    parameters: [log: Log],
+    details: {
+      log: Log,
+    },
+    result: boolean | void,
+  }
 };
+
+export interface CallInfo {
+  id: string;
+  name: string;
+}
+
+export type Log = {
+  call: Call,
+  subject: string,
+  comment: string,
+  result: string,
+  recordId: string,
+  relatedRecordId?: string,
+  tenant: string,
+  user: string,
+}
 
 export type GlobalEventNames = keyof GlobalEventsMap;
 

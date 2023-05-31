@@ -1,3 +1,4 @@
+import { logState } from '@/state/atoms/logState';
 import { authState } from '@/state/authState';
 import { callsState } from '@/state/callsState';
 import { AuthData } from '@/types/app';
@@ -96,6 +97,7 @@ export class PBX {
   disconnect = () => {
     authState.logout();
     callsState.reset();
+    logState.reset();
     this.phone?.cleanup();
     this.phone = undefined;
     this.pal = undefined;

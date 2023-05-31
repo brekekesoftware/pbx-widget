@@ -1,5 +1,6 @@
 import Logo from '@/assets/images/logo.png';
 import CallLog from '@/components/CallLog';
+import Log from '@/components/Log';
 import { pbx } from '@/services/pbx';
 import { authState } from '@/state/authState';
 import { onNumberEntry } from '@/utils/events/listeners';
@@ -64,6 +65,7 @@ const Main = () => {
         show={isOpen}
         call={call}
       />
+      <Log />
     </>
   );
 };

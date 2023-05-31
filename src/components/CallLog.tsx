@@ -1,7 +1,9 @@
 import Duration from '@/components/Duration';
+import { logState } from '@/state/atoms/logState';
 import { callsState } from '@/state/callsState';
 import { Call } from '@/types/phone';
 import { useObserver } from 'mobx-react';
+import NoteIcon from '@/assets/icons/note.svg';
 
 const CallLog = () => {
   const calls = useObserver(() => callsState.inactiveCalls);
@@ -20,12 +22,17 @@ const CallLog = () => {
 
   const renderCall = (call: Call) => {
     return (
-      <div key={call.id} className='bg-white p-1.5'>
-        <p className='font-bold text-sm'>{call.getDisplayName()}</p>
-        <span className='text-xs'>
+      <div key={call.id} className='bg-white p-1.5 flex justify-between'>
+        <div>
+          <p className='font-bold text-sm'>{call.getDisplayName()}</p>
+          <span className='text-xs'>
           {callStatus(call)}
         </span>
-        {renderDuration(call)}
+          {renderDuration(call)}
+        </div>
+        <button onClick={() => logState.open(call)} title='Note'>
+          <img className='h-6 w-6' src={NoteIcon} alt="note" />
+        </button>
       </div>
     );
   }
