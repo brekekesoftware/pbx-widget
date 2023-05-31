@@ -37,7 +37,15 @@ export class PBX {
     phone.on('pal', (pal) => {
       const account = phone.getCurrentAccount();
       logger('phone.on(pal)', { account, pal });
-      authState.login(account);
+      authState.login(account, () => {
+        this.listeners.push(
+          onMakeCallEvent(event => {
+            logger('onMakeCallEvent', event);
+
+            phone.call(event.number);
+          }),
+        );
+      });
 
       const onError = pal.onError;
       pal.onError = (e) => {
@@ -52,14 +60,6 @@ export class PBX {
       }
 
       this.pal = pal;
-
-      this.listeners.push(
-        onMakeCallEvent(event => {
-          logger('onMakeCallEvent', event);
-
-          phone.call(event.number);
-        }),
-      );
     });
 
     phone.on('call', this.onCall);

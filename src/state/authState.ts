@@ -18,9 +18,11 @@ export class AuthState {
     });
   }
 
-  login = (account: Account) => {
+  login = (account: Account, callback: VoidFunction) => {
+    if (this.loggedIn) return;
     this.account = account;
     fireLoggedInEvent();
+    callback();
   }
 
   logout = () => {
