@@ -54,6 +54,7 @@ export class CallsState {
   }
 
   callInfo = (call: Call, info: CallInfo) => {
+    if (this.callsInfo[call.id] !== undefined) return;
     this.callsInfo[call.id] = info;
   }
 

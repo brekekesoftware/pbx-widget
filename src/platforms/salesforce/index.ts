@@ -1,5 +1,7 @@
+import { Call } from '@/types/phone';
 import {
-  onCallEvent,
+  onCallEndedEvent,
+  onCallEvent, onCallUpdatedEvent,
   onLogEvent,
   onLoggedInEvent,
   onLoggedOutEvent,
@@ -32,9 +34,18 @@ setupOpenCti().then(() => {
     },
   });
 
+  let currentCall: Call | undefined;
+
   sforce.opencti.onNavigationChange({
     listener: (payload) => {
       console.log('onNavigationChange', payload);
+
+      if (currentCall && payload.objectType) {
+        fireCallInfoEvent(currentCall, {
+          id: payload.recordId,
+          name: formatRecordName(payload.recordName, payload.objectType),
+        });
+      }
     },
   });
 
@@ -43,7 +54,15 @@ setupOpenCti().then(() => {
   });
 
   onLoggedOutEvent(() => {
+    currentCall = undefined;
     sforce.opencti.disableClickToDial({ callback: () => console.log('disableClickToDial') });
+  });
+
+  onCallUpdatedEvent(({ call }) => void (currentCall = call));
+  onCallEndedEvent(({ call }) => {
+    if (call.id === currentCall?.id) {
+      currentCall = undefined;
+    }
   });
 
   onCallEvent(({ call }) => {
@@ -67,7 +86,7 @@ setupOpenCti().then(() => {
 
           fireCallInfoEvent(call, {
             id: record.Id,
-            name: `[${record.RecordType}] ${record.Name}`,
+            name: formatRecordName(record.Name, record.RecordType),
           });
 
           // sforce.opencti.screenPop({
@@ -111,6 +130,8 @@ setupOpenCti().then(() => {
     });
   });
 });
+
+const formatRecordName = (name: string, type: string) => `[${type}] ${name}`;
 
 const formatDate = (date: Date) => {
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
