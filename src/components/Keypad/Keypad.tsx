@@ -92,6 +92,7 @@ const Keypad: FC<Props> = ({ number, onNumberChange, title, onKeyInput, show, cl
                 <button
                   className="h-12 w-12 rounded-full bg-app font-bold flex items-center justify-center"
                   onClick={() => {
+                    if (value.trim().length === 0) return;
                     close();
                     call(value);
                   }}
