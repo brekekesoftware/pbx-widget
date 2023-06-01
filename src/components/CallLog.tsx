@@ -1,7 +1,9 @@
 import Duration from '@/components/Duration';
+import { pbx } from '@/services/pbx';
 import { logState } from '@/state/atoms/logState';
 import { callsState } from '@/state/callsState';
 import { Call } from '@/types/phone';
+import { PhoneIcon } from '@heroicons/react/24/solid';
 import { useObserver } from 'mobx-react';
 import NoteIcon from '@/assets/icons/note.svg';
 
@@ -35,9 +37,14 @@ const CallLog = () => {
         </span>
           {renderDuration(call)}
         </div>
-        <button onClick={() => logState.open(call)} title='Note'>
-          <img className='h-6 w-6' src={NoteIcon} alt="note" />
-        </button>
+        <div className="flex items-center gap-2.5">
+          <button className='bg-green-400 h-6 w-6 p-1 rounded-full' onClick={() => pbx.call(call.partyNumber)} title='Dial'>
+            <PhoneIcon className='text-white h-4 w-4' />
+          </button>
+          <button onClick={() => logState.open(call)} title='Note'>
+            <img className='h-6 w-6' src={NoteIcon} alt="note" />
+          </button>
+        </div>
       </div>
     );
   }
