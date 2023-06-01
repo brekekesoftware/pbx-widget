@@ -38,8 +38,8 @@ const CallLog = () => {
           {renderDuration(call)}
         </div>
         <div className="flex items-center gap-2.5">
-          <button className='bg-green-400 h-6 w-6 p-1 rounded-full' onClick={() => pbx.call(call.partyNumber)} title='Dial'>
-            <PhoneIcon className='text-white h-4 w-4' />
+          <button className='h-6 w-6 p-1 rounded-full' onClick={() => pbx.call(call.partyNumber)} title='Dial'>
+            <PhoneIcon className='text-green-400 h-4 w-4' />
           </button>
           <button onClick={() => logState.open(call)} title='Note'>
             <img className='h-6 w-6' src={NoteIcon} alt="note" />

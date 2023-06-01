@@ -66,7 +66,7 @@ setupOpenCti().then(() => {
   });
 
   onCallEvent(({ call }) => {
-    console.log('xxx onCallEvent', call);
+    console.log('onCallEvent', call);
     sforce.opencti.searchAndScreenPop({
       searchParams: call.partyNumber,
       deferred: false,
