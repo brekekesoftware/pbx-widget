@@ -100,7 +100,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
             <PhoneXMarkIcon className='text-white h-4 w-4' />
           </button>
           <button className='bg-red-400 p-2 rounded-full' onClick={() => call.rawSession?.rtcSession.terminate()} title='Transfer'>
-            <PhoneXMarkIcon className='text-white h-4 w-4' />
+            <PhoneIcon className='text-white h-4 w-4' />
           </button>
           <button className='bg-green-400 p-2 rounded-full' onClick={call.conferenceTransferring} title='Conference Transfer'>
             <PhoneIcon className='text-white h-4 w-4' />
