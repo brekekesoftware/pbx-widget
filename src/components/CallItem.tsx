@@ -29,6 +29,9 @@ const CallItem: FC<Props> = observer(({ call }) => {
   const [muted, setMuted] = useState(call.muted);
   const [recording, setRecording] = useState(call.recording);
   const [answered, setAnswered] = useState(call.answered);
+  const [transferNumber, setTransferNumber] = useState(call.transferring);
+
+  const isTransferring = holding && transferNumber.length > 0;
 
   const displayName = useObserver(() => callsState.displayName(call));
 
@@ -38,6 +41,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
       setMuted(call.muted);
       setRecording(call.recording);
       setAnswered(call.answered);
+      setTransferNumber(call.transferring);
     }, 100);
 
     return () => clearInterval(interval);
@@ -71,9 +75,37 @@ const CallItem: FC<Props> = observer(({ call }) => {
       if (!call.incoming || call.answered) return null;
 
       return (
-        <button className='bg-green-400 p-2 rounded-full' onClick={() => call.answer()}>
+        <button className='bg-green-400 p-2 rounded-full' onClick={() => call.answer()} title='Answer'>
           <PhoneIcon className='text-white h-4 w-4' />
         </button>
+      );
+    }
+
+    const renderDisconnectButton = () => {
+      if (isTransferring || holding) return null;
+
+      return (
+        <button className='bg-red-400 p-2 rounded-full' onClick={call.hangupWithUnhold} title='Disconnect'>
+          <PhoneXMarkIcon className='text-white h-4 w-4' />
+        </button>
+      );
+    }
+
+    const renderTransferButtons = () => {
+      if (!isTransferring) return null;
+
+      return (
+        <>
+          <button className='bg-yellow-400 p-2 rounded-full' onClick={call.stopTransferring} title='Stop Transfer'>
+            <PhoneXMarkIcon className='text-white h-4 w-4' />
+          </button>
+          <button className='bg-red-400 p-2 rounded-full' onClick={() => call.rawSession?.rtcSession.terminate()} title='Transfer'>
+            <PhoneXMarkIcon className='text-white h-4 w-4' />
+          </button>
+          <button className='bg-green-400 p-2 rounded-full' onClick={call.conferenceTransferring} title='Conference Transfer'>
+            <PhoneXMarkIcon className='text-white h-4 w-4' />
+          </button>
+        </>
       );
     }
 
@@ -87,7 +119,8 @@ const CallItem: FC<Props> = observer(({ call }) => {
       return (
         <span className='text-xs'>
           <Duration getDuration={call.getDuration} />
-          {call.holding && <span className='ml-2 font-bold'>On Hold</span>}
+          {!isTransferring && call.holding && <span className='ml-2 font-bold'>On Hold</span>}
+          {isTransferring && <span className='ml-2 font-bold'>Transferring to {transferNumber}</span>}
           {call.muted && <span className='ml-2 font-bold'>Muted</span>}
         </span>
       );
@@ -103,9 +136,8 @@ const CallItem: FC<Props> = observer(({ call }) => {
           {renderStatus()}
         </div>
         {renderAnswer()}
-        <button className='bg-red-400 p-2 rounded-full' onClick={() => call.hangupWithUnhold()}>
-          <PhoneXMarkIcon className='text-white h-4 w-4' />
-        </button>
+        {renderDisconnectButton()}
+        {renderTransferButtons()}
       </div>
     );
   };
@@ -164,7 +196,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
         title={transferState.blind ? 'Blind transfer' : 'Attended transfer'}
         close={close}
         show={transferState.show}
-        call={number => transfer(number)}
+        call={transfer}
       />
     </>
   );
