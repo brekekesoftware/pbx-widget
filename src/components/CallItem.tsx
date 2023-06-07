@@ -6,7 +6,7 @@ import { Call } from '@/types/phone';
 import { PhoneIcon, PhoneXMarkIcon } from '@heroicons/react/24/solid';
 import { autorun } from 'mobx';
 import { observer, useObserver } from 'mobx-react';
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Duration from './Duration';
 import AttendedTransferIcon from '@/assets/icons/attended-transfer.svg';
 import BlindTransferIcon from '@/assets/icons/blind-transfer.svg';
@@ -21,10 +21,6 @@ interface Props {
 }
 
 const CallItem: FC<Props> = observer(({ call }) => {
-  // const holding = useObserver(() => call.holding);
-  // const muted = useObserver(() => call.muted);
-  // const recording = useObserver(() => call.recording);
-  // const answered = useObserver(() => call.answered);
   const [holding, setHolding] = useState(call.holding);
   const [muted, setMuted] = useState(call.muted);
   const [recording, setRecording] = useState(call.recording);
@@ -35,112 +31,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
 
   const displayName = useObserver(() => callsState.displayName(call));
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setHolding(call.holding);
-      setMuted(call.muted);
-      setRecording(call.recording);
-      setAnswered(call.answered);
-      setTransferNumber(call.transferring);
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [call]);
-
-  const toggleHold = () => {
-    new Promise((resolve) => {
-      call.toggleHoldWithCheck();
-      setTimeout(resolve, 1000);
-    }).then(() => setHolding(call.holding));
-  };
-
-  const toggleMuted = () => {
-    call.toggleMuted();
-    setMuted(() => call.muted)
-  };
-
-  const toggleRecording = () => {
-    call.toggleRecording().then(() => setRecording(call.recording));
-  }
-
-  const answer = () => {
-    new Promise((resolve) => {
-      call.answer();
-      setTimeout(resolve, 1000);
-    }).then(() => setAnswered(call.answered));
-  }
-
-  const renderInfo = () => {
-    const renderAnswer = () => {
-      if (!call.incoming || call.answered) return null;
-
-      return (
-        <button className='bg-green-400 p-2 rounded-full' onClick={() => call.answer()} title='Answer'>
-          <PhoneIcon className='text-white h-4 w-4' />
-        </button>
-      );
-    }
-
-    const renderDisconnectButton = () => {
-      if (isTransferring || holding) return null;
-
-      return (
-        <button className='bg-red-400 p-2 rounded-full' onClick={call.hangupWithUnhold} title='Disconnect'>
-          <PhoneXMarkIcon className='text-white h-4 w-4' />
-        </button>
-      );
-    }
-
-    const renderTransferButtons = () => {
-      if (!isTransferring) return null;
-
-      return (
-        <>
-          <button className='bg-yellow-400 p-2 rounded-full' onClick={call.stopTransferring} title='Stop Transfer'>
-            <PhoneXMarkIcon className='text-white h-4 w-4' />
-          </button>
-          <button className='bg-red-400 p-2 rounded-full' onClick={() => call.rawSession?.rtcSession.terminate()} title='Transfer'>
-            <PhoneIcon className='text-white h-4 w-4' />
-          </button>
-          <button className='bg-green-400 p-2 rounded-full' onClick={call.conferenceTransferring} title='Conference Transfer'>
-            <PhoneIcon className='text-white h-4 w-4' />
-          </button>
-        </>
-      );
-    }
-
-    const renderStatus = () => {
-      if (!call.answered) return (
-        <span className='text-xs'>
-          {call.incoming ? 'Incoming...' : 'Calling...'}
-        </span>
-      );
-
-      return (
-        <span className='text-xs'>
-          <Duration getDuration={call.getDuration} />
-          {!isTransferring && call.holding && <span className='ml-2 font-bold'>On Hold</span>}
-          {isTransferring && <span className='ml-2 font-bold'>Transferring to {transferNumber}</span>}
-          {call.muted && <span className='ml-2 font-bold'>Muted</span>}
-        </span>
-      );
-    }
-
-    return (
-      <div className='flex gap-2 p-2 items-center'>
-        <div className='grow'>
-          <div className='font-bold'>
-            {displayName ?? call.getDisplayName()}
-            {displayName && <span className='ml-2 text-xs font-normal'>({call.partyNumber})</span>}
-          </div>
-          {renderStatus()}
-        </div>
-        {renderAnswer()}
-        {renderDisconnectButton()}
-        {renderTransferButtons()}
-      </div>
-    );
-  };
+  const [isMin, setIsMin] = useState(false);
 
   const [transferState, setTransferState] = useState({
     show: false,
@@ -155,40 +46,198 @@ const CallItem: FC<Props> = observer(({ call }) => {
     } else {
       void call.transferAttended(number);
     }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHolding(call.holding);
+      setMuted(call.muted);
+      setRecording(call.recording);
+      setAnswered(call.answered);
+      setTransferNumber(call.transferring);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [call]);
+
+  const toggleHold: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    call.toggleHoldWithCheck();
   }
+
+  const toggleMuted: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    call.toggleMuted();
+  }
+
+  const toggleRecording: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    void call.toggleRecording();
+  };
+
+  const openAttendedTransfer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    open();
+  }
+
+  const openBlindTransfer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    open(true);
+  }
+
+  const openLog: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    logState.open(call);
+  }
+
+  const answer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    call.answer();
+  }
+
+  const disconnect: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    void call.hangupWithUnhold();
+  }
+
+  const stopTransfer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    void call.stopTransferring();
+  }
+
+  const connectTransfer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    call.rawSession?.rtcSession.terminate();
+  }
+
+  const conferenceTransfer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    void call.conferenceTransferring();
+  }
+
+  const renderAnswer = () => {
+    if (!call.incoming || call.answered) return null;
+
+    return (
+      <button className="bg-green-400 p-2 rounded-full" onClick={answer} title="Answer">
+        <PhoneIcon className="text-white h-4 w-4" />
+      </button>
+    );
+  };
+
+  const renderDisconnectButton = () => {
+    if (isTransferring || holding) return null;
+
+    return (
+      <button className="bg-red-400 p-2 rounded-full" onClick={disconnect} title="Disconnect">
+        <PhoneXMarkIcon className="text-white h-4 w-4" />
+      </button>
+    );
+  };
+
+  const renderTransferButtons = () => {
+    if (!isTransferring) return null;
+
+    return (
+      <>
+        <button className="bg-yellow-400 p-2 rounded-full" onClick={stopTransfer} title="Stop Transfer">
+          <PhoneXMarkIcon className="text-white h-4 w-4" />
+        </button>
+        <button className="bg-red-400 p-2 rounded-full" onClick={connectTransfer} title="Transfer">
+          <PhoneIcon className="text-white h-4 w-4" />
+        </button>
+        <button className="bg-green-400 p-2 rounded-full" onClick={conferenceTransfer} title="Conference Transfer">
+          <PhoneIcon className="text-white h-4 w-4" />
+        </button>
+      </>
+    );
+  };
+
+  const renderStatus = () => {
+    if (!call.answered) return (
+      <span className="text-xs">
+        {call.incoming ? 'Incoming...' : 'Calling...'}
+      </span>
+    );
+
+    return (
+      <span className="text-xs whitespace-nowrap">
+        <Duration getDuration={call.getDuration} />
+        {!isTransferring && call.holding && <span className="ml-2 font-bold">On Hold</span>}
+        {isTransferring && <span className="ml-2 font-bold">Transferring to {transferNumber}</span>}
+        {call.muted && <span className="ml-2 font-bold">Muted</span>}
+      </span>
+    );
+  };
+
+  const renderInfo = () => {
+    return (
+      <div className="flex gap-2 p-2 items-center">
+        <div className="grow">
+          <div className="font-bold">
+            {displayName ?? call.getDisplayName()}
+            {displayName && <span className="ml-2 text-xs font-normal">({call.partyNumber})</span>}
+          </div>
+          {renderStatus()}
+        </div>
+        {renderAnswer()}
+        {renderDisconnectButton()}
+        {renderTransferButtons()}
+      </div>
+    );
+  };
 
   const renderActionButtons = () => {
     if (!call.answered) return null;
 
     return (
       <div className="flex gap-2 justify-around px-4 pb-1">
-        <button onClick={() => call.toggleHoldWithCheck()} title={holding ? 'unhold' : 'hold'}>
-          <img className='h-5 w-5' src={holding ? PlayIcon : PauseIcon} alt={holding ? 'unhold' : 'hold'} />
+        <button onClick={toggleHold} title={holding ? 'unhold' : 'hold'}>
+          <img className="h-5 w-5" src={holding ? PlayIcon : PauseIcon} alt={holding ? 'unhold' : 'hold'} />
         </button>
-        <button className='h-6 w-6' onClick={() => call.toggleMuted()} title={muted ? 'unmute' : 'mute'}>
-          <img className='h-5 w-5' src={muted ? MicIcon : MicOffIcon} alt={muted ? 'unmute' : 'mute'} />
+        <button className="h-6 w-6" onClick={toggleMuted} title={muted ? 'unmute' : 'mute'}>
+          <img className="h-5 w-5" src={muted ? MicIcon : MicOffIcon} alt={muted ? 'unmute' : 'mute'} />
         </button>
-        {/*<button onClick={() => call.toggleRecording()}>*/}
+        {/*<button onClick={toggleRecording}>*/}
         {/*  {recording ? 'stop recording' : 'record'}*/}
         {/*</button>*/}
-        <button onClick={() => open()} title='Attended transfer'>
+        <button onClick={openAttendedTransfer} title="Attended transfer">
           <img src={AttendedTransferIcon} alt="attended transfer" />
         </button>
-        <button onClick={() => open(true)} title='Blind transfer'>
-          <img className='h-6 w-6' src={BlindTransferIcon} alt="blind transfer" />
+        <button onClick={openBlindTransfer} title="Blind transfer">
+          <img className="h-6 w-6" src={BlindTransferIcon} alt="blind transfer" />
         </button>
-        <button onClick={() => logState.open(call)} title='Note'>
-          <img className='h-6 w-6' src={NoteIcon} alt="note" />
+        <button onClick={openLog} title="Note">
+          <img className="h-6 w-6" src={NoteIcon} alt="note" />
         </button>
       </div>
     );
   };
 
-  // return renderInfo();
+  const renderMinimized = () => {
+    return (
+      <div className="z-40 bg-white border-b p-2 gap-2 flex items-center justify-between" onClick={() => setIsMin(false)}>
+        <div className="flex gap-2 items-center overflow-hidden">
+          <div className="font-bold whitespace-nowrap truncate">
+            {displayName ?? call.getDisplayName()}
+          </div>
+          {renderStatus()}
+        </div>
+        {renderDisconnectButton()}
+      </div>
+    );
+  };
+
+  if (isMin) {
+    return renderMinimized();
+  }
 
   return (
     <>
-      <div className='z-50 bg-white border-b'>
+      <div className="z-40 bg-white border-b" onClick={() => {
+        if (!call.answered) return;
+        setIsMin(true);
+      }}>
         {renderInfo()}
         {renderActionButtons()}
       </div>
@@ -214,4 +263,4 @@ const callStatus = (call: Call) => {
   }
 
   return 'Outgoing';
-}
+};
