@@ -30,7 +30,7 @@ const Log = () => {
 
   return (
     <Transition appear show={showLog} as={Fragment}>
-      <div className="absolute inset-0 z-10">
+      <div className="absolute inset-0 z-40">
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
