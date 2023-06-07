@@ -15,6 +15,7 @@ type SearchResult = {
 
 interface CallbackResponses {
   toggleClickToDial: CallbackResponse<null>;
+  setSoftphonePanelVisibility: CallbackResponse<null>;
   refreshView: CallbackResponse<null>;
   runApex: CallbackResponse<{ runApex: string }>;
   saveLog: CallbackResponse<string | null>;
@@ -40,13 +41,21 @@ interface PayloadTypes {
     accountId?: string;
     contactId?: string;
     personAccount?: boolean;
-  }
+  };
 }
 
 interface OpenCTI {
-  disableClickToDial: (params: { callback: Callback<CallbackResponses['toggleClickToDial']> }) => void;
-  enableClickToDial: (params: { callback: Callback<CallbackResponses['toggleClickToDial']> }) => void;
+  disableClickToDial: (params: {
+    callback: Callback<CallbackResponses['toggleClickToDial']>
+  }) => void;
+  enableClickToDial: (params: {
+    callback: Callback<CallbackResponses['toggleClickToDial']>
+  }) => void;
   onClickToDial: (params: { listener: Listener<PayloadTypes['onClickToDial']> }) => void;
+  setSoftphonePanelVisibility: (params: {
+    visible: boolean;
+    callback?: Callback<CallbackResponses['setSoftphonePanelVisibility']>
+  }) => void;
   onNavigationChange: (params: { listener: Listener<PayloadTypes['onNavigationChange']> }) => void;
   runApex: (params: {
     apexClass: string;
@@ -94,6 +103,7 @@ interface Salesforce {
 
 export declare global {
   const sforce: Salesforce;
+
   interface Window {
     sforce: Salesforce;
   }

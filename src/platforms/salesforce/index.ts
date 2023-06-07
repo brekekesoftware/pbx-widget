@@ -67,6 +67,7 @@ setupOpenCti().then(() => {
 
   onCallEvent(({ call }) => {
     console.log('onCallEvent', call);
+    sforce.opencti.setSoftphonePanelVisibility({ visible: true });
     sforce.opencti.searchAndScreenPop({
       searchParams: call.partyNumber,
       deferred: false,
@@ -111,7 +112,7 @@ setupOpenCti().then(() => {
         Status: 'completed',
         CallType: call.incoming ? 'Inbound' : 'Outbound',
         // ActivityDate: formatDate(new Date(call.createdAt)),
-        CallObject: `${log.tenant} ${call.id}.${call.createdAt} ${log.user}`,
+        CallObject: `${log.tenant} ${call.pbxRoomId} ${log.user}`,
         Phone: call.partyNumber,
         Description: log.comment,
         CallDisposition: log.result,

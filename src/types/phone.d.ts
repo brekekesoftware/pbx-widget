@@ -33,6 +33,7 @@ interface Call {
   // partyName: string;
   pbxTalkerId: string;
   pbxTenant: string;
+  pbxRoomId: string;
   isFrontCamera: boolean;
 
   getDisplayName: () => string;
