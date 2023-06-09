@@ -12,7 +12,7 @@ export default {
         sans: ['Nunito', ...defaultTheme.fontFamily.sans],
       },
       width: {
-        widget: '288px',
+        widget: '398px',
       },
       colors: {
         app: {
