@@ -22,8 +22,8 @@ export class PBX {
     logger('PBX.connect', auth);
     const el = document.getElementById('webphone_embed')!;
     const phone: Phone = window.Brekeke.Phone.render(el, {
-      auto_login: true,
-      clear_existing_accounts: true,
+      autoLogin: true,
+      clearExistingAccounts: true,
       accounts: [
         {
           hostname: auth.host,
@@ -33,7 +33,37 @@ export class PBX {
           password: auth.password,
         },
       ],
+      palEvents: [
+        'onClose',
+        'onError',
+        'notify_serverstatus',
+        'notify_status',
+        // ...
+      ],
     });
+
+    console.log('phone', phone, el);
+
+    // @ts-ignore
+    phone.on('pal.onError', e => {
+      logger('phone.on(pal.onError)', e);
+      this.disconnect();
+      // if (e.error.message === 'Login failed (4)') {
+      //   console.log('Login failed');
+      // }
+    });
+
+    // @ts-ignore
+    phone.on('pal.onClose', e => {
+      logger('phone.on(pal.onClose)', e);
+      this.disconnect();
+    });
+
+    // @ts-ignore
+    phone.on('pal.notify_serverstatus', e => logger('phone.on(pal.notify_serverstatus)', e));
+
+    // @ts-ignore
+    phone.on('pal.notify_status', e => logger('phone.on(pal.notify_status)', e));
 
     phone.on('pal', (pal) => {
       const account = phone.getCurrentAccount();
@@ -47,18 +77,6 @@ export class PBX {
           }),
         );
       });
-
-      const onError = pal.onError;
-      pal.onError = (e) => {
-        onError?.(e);
-        console.log('pal.onError', e);
-        // auth?.callback?.(false);
-        authState.logout();
-        // if (e.error.message === 'Login failed (4)') {
-        //   console.log('Login failled');
-        //   auth?.callback?.(false);
-        // }
-      }
 
       this.pal = pal;
     });
@@ -98,6 +116,7 @@ export class PBX {
     authState.logout();
     callsState.reset();
     logState.reset();
+    this.phone?.removeAllListeners();
     this.phone?.cleanup();
     this.phone = undefined;
     this.pal = undefined;

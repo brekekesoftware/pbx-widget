@@ -19,6 +19,8 @@ interface Phone {
   getCurrentAccount: () => Account;
   promptBrowserPermission: () => void;
   cleanup: () => void;
+  removeListener: (event: string, callback: Function) => void;
+  removeAllListeners: (event?: string) => void;
 }
 
 interface Call {
