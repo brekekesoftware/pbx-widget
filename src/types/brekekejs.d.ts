@@ -1,8 +1,34 @@
+import {
+  onCallEndedEvent,
+  onCallEvent,
+  onCallUpdatedEvent,
+  onLogEvent,
+  onLoggedInEvent,
+  onLoggedOutEvent,
+} from '@/utils/events/listeners';
+import { fireCallInfoEvent, fireLogSavedEvent, fireMakeCallEvent } from '@/utils/events/triggers';
+
 declare global {
   interface Window {
     Brekeke: Brekeke
   }
 }
+
+type WidgetCallbackParams = {
+  // Listeners
+  onCallEndedEvent: typeof onCallEndedEvent;
+  onCallEvent: typeof onCallEvent;
+  onCallUpdatedEvent: typeof onCallUpdatedEvent;
+  onLogEvent: typeof onLogEvent;
+  onLoggedInEvent: typeof onLoggedInEvent;
+  onLoggedOutEvent: typeof onLoggedOutEvent;
+  // Triggers
+  fireCallInfoEvent: typeof fireCallInfoEvent;
+  fireLogSavedEvent: typeof fireLogSavedEvent;
+  fireMakeCallEvent: typeof fireMakeCallEvent;
+}
+
+type WidgetCallback = (params: WidgetCallbackParams) => void
 
 export type Brekeke = {
   pbx: {
@@ -16,6 +42,7 @@ export type Brekeke = {
   }
   Phonebook: Phonebook
   WebNotification: WebNotification
+  renderWidget: (el: HTMLElement, callback: WidgetCallback) => void;
 }
 export type WebNotification = {
   requestPermission(Options: OptionRequestNotification): void

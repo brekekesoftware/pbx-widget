@@ -8,32 +8,32 @@ export default defineConfig({
     react(),
   ],
   base: '',
+  define: {
+    'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
+  },
   build: {
-    // cssCodeSplit: false,
-    // manifest: true,
-    // sourcemap: true,
+    cssCodeSplit: false,
+    manifest: true,
+    sourcemap: true,
+    copyPublicDir: true,
     // assetsInlineLimit: 0,
-    // lib: {
-    //   // name: 'brekekewidget',
-    //   entry: {
+    lib: {
+      // name: 'brekekewidget',
+      entry: './src/main.tsx',
+      formats: ['cjs'],
+      fileName: (format, entryName) => {
+        return `widget.js`;
+      },
+    },
+
+    // rollupOptions: {
+    //   input: {
     //     widget: './src/main.tsx',
     //     // main: './index.html',
-    //     // salesforce: './salesforce/index.html',
+    //     salesforce: './salesforce/index.html',
     //   },
-    //   formats: ['es'],
-    //   fileName: (format, entryName) => {
-    //     return `${entryName}/index.js`;
-    //   },
-    // },
-
-    rollupOptions: {
-      input: {
-        widget: './src/main.tsx',
-        // main: './index.html',
-        salesforce: './salesforce/index.html',
-      },
-      // external: ['react', 'react-dom']
-    }
+    //   // external: ['react', 'react-dom']
+    // }
   },
   resolve: {
     alias: {

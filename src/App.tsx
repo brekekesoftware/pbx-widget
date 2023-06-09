@@ -5,15 +5,10 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   const env = import.meta.env;
   const nodeEnv = process.env.NODE_ENV;
 
-  console.log({
-    env,
-    nodeEnv,
-  });
+  console.log({ env, nodeEnv });
 
   return <Widget />;
 }
