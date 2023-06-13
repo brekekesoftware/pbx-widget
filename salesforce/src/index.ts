@@ -2,7 +2,8 @@ import { Call } from '@/types/phone';
 
 const setupOpenCti = () => {
   return new Promise<void>((resolve) => {
-    const salesForceHost = document.location.ancestorOrigins[0];
+    const salesForceHost = document.location.ancestorOrigins?.[0]
+      ?? (new URLSearchParams(document.location.search)).get('sfdcIframeOrigin');
     const scriptSrc = `${salesForceHost}/support/api/57.0/lightning/opencti_min.js`;
 
     // load salesforce opencti script
