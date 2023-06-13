@@ -5,8 +5,8 @@ import {
   onLogEvent,
   onLoggedInEvent,
   onLoggedOutEvent,
-} from '@/utils/events/listeners';
-import { fireCallInfoEvent, fireLogSavedEvent, fireMakeCallEvent } from '@/utils/events/triggers';
+} from '@core/utils/events/listeners';
+import { fireCallInfoEvent, fireLogSavedEvent, fireMakeCallEvent } from '@core/utils/events/triggers';
 
 declare global {
   interface Window {

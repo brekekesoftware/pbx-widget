@@ -1,4 +1,4 @@
-import { Pbx, Session, SessionStatus } from '@/types/brekekejs';
+import { Pbx, Session, SessionStatus } from '@core/types/brekekejs';
 
 interface PhoneEvents {
   pal: [pal: Pbx];

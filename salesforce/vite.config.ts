@@ -6,7 +6,7 @@ export default defineConfig({
   base: '',
   resolve: {
     alias: {
-      '@salesforce': path.resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
 });

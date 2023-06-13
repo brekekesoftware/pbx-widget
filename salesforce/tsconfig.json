@@ -17,8 +17,8 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["../core/src/*"],
-      "@salesforce/*": ["src/*"],
+      "@/*": ["src/*"],
+      "@core/*": ["../core/src/*"],
     }
   },
   "include": ["src"],

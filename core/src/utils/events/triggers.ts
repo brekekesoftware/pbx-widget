@@ -1,6 +1,6 @@
-import { CallInfo, GlobalEventTrigger, Log } from '@/types/events';
-import { Call } from '@/types/phone';
-import { fireEvent } from '@/utils/events/common';
+import { CallInfo, GlobalEventTrigger, Log } from '@core/types/events';
+import { Call } from '@core/types/phone';
+import { fireEvent } from '@core/utils/events/common';
 
 export const fireCallEvent: GlobalEventTrigger<'call'> = (call: any) => {
   return fireEvent('call', { call });

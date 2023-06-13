@@ -1,4 +1,4 @@
-import { Call } from '@/types/phone';
+import { Call } from '@core/types/phone';
 
 type GlobalEventsMap = {
   'logged-in': {

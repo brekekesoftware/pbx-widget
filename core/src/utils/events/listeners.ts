@@ -1,5 +1,5 @@
-import { GlobalEventCallback } from '@/types/events';
-import { onEvent } from '@/utils/events/common';
+import { GlobalEventCallback } from '@core/types/events';
+import { onEvent } from '@core/utils/events/common';
 
 export const onNumberEntry = (callback: GlobalEventCallback<'number-entry'>) => onEvent('number-entry', callback);
 

@@ -3,8 +3,8 @@ import {
   GlobalEventCallback,
   GlobalEventDetails,
   GlobalEventNames,
-} from '@/types/events';
-import { logger } from '@/utils/logger';
+} from '@core/types/events';
+import { logger } from '@core/utils/logger';
 
 const prefix = 'brekeke';
 
