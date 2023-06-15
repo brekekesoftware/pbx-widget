@@ -234,7 +234,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
 
   return (
     <>
-      <div className="z-40 bg-white border-b" onClick={() => {
+      <div className="bg-white border-b" onClick={() => {
         if (!call.answered) return;
         setIsMin(true);
       }}>
