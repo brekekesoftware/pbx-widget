@@ -1,9 +1,11 @@
-import { Call } from '@core/types/phone';
+import { Account, Call } from '@core/types/phone';
 
 type GlobalEventsMap = {
   'logged-in': {
-    parameters: [],
-    details: {},
+    parameters: [account: Account],
+    details: {
+      account: Account,
+    },
     result: boolean | void,
   },
   'logged-out': {

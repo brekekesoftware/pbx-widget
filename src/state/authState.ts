@@ -21,7 +21,7 @@ export class AuthState {
   login = (account: Account, callback: VoidFunction) => {
     if (this.loggedIn) return;
     this.account = account;
-    fireLoggedInEvent();
+    fireLoggedInEvent(account);
     callback();
   }
 
