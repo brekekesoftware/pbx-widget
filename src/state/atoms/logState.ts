@@ -60,6 +60,7 @@ export class LogState {
   getLog = (call: Call) => {
     return this.callsLog[call.id] ??= {
       call: call,
+      duration: 0,
       comment: '',
       recordId: callsState.callsInfo[call.id]?.id ?? '',
       result: '',
@@ -79,6 +80,7 @@ export class LogState {
   submitLog = () => {
     if (this.current === undefined) return;
     const log = this.getLog(this.current);
+    log.duration = callsState.callDuration(this.current);
     fireLogEvent(log);
   }
 

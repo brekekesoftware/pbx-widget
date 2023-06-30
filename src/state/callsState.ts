@@ -53,6 +53,8 @@ export class CallsState {
     this.callsEndedTime[call.id] = Date.now();
   }
 
+  callDuration = (call: Call) => this.callsEndedTime[call.id] - call.answeredAt;
+
   callInfo = (call: Call, info: CallInfo) => {
     if (this.callsInfo[call.id] !== undefined) return;
     this.callsInfo[call.id] = info;

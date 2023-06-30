@@ -13,11 +13,9 @@ const CallLog = () => {
   const renderDuration = (call: Call) => {
     if (!call.answered) return null;
 
-    const endedAt = callsState.callsEndedTime[call.id];
-
     return (
       <span className="ml-2">
-        <Duration getDuration={() => endedAt - call.answeredAt} stop={true} />
+        <Duration getDuration={() => callsState.callDuration(call)} stop={true} />
       </span>
     );
   }

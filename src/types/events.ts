@@ -77,6 +77,7 @@ export interface CallInfo {
 
 export type Log = {
   call: Call,
+  duration: number,
   subject: string,
   comment: string,
   result: string,
