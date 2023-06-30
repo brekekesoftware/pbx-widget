@@ -73,6 +73,7 @@ type GlobalEventsMap = {
 export interface CallInfo {
   id: string;
   name: string;
+  type?: string;
 }
 
 export type Log = {
@@ -82,6 +83,7 @@ export type Log = {
   comment: string,
   result: string,
   recordId: string,
+  recordType?: string,
   relatedRecordId?: string,
   tenant: string,
   user: string,
