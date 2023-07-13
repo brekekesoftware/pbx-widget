@@ -39,9 +39,9 @@ export class CallsState {
       reset: action,
     });
 
-    onCallEvent(e => this.addCall(e.call));
-    onCallUpdatedEvent(e => this.addCall(e.call));
-    onCallEndedEvent(e => this.endCall(e.call));
+    onCallEvent(this.addCall);
+    onCallUpdatedEvent(this.addCall);
+    onCallEndedEvent(this.endCall);
     onCallInfoEvent(({ call, info }) => this.callInfo(call, info));
   }
 

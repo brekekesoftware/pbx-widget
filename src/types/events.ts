@@ -18,23 +18,17 @@ type GlobalEventsMap = {
   },
   call: {
     parameters: [call: Call],
-    details: {
-      call: Call,
-    },
+    details: Call,
     result: boolean | void,
   },
   'call-updated': {
     parameters: [call: Call],
-    details: {
-      call: Call,
-    },
+    details: Call,
     result: boolean | void,
   },
   'call-ended': {
     parameters: [call: Call],
-    details: {
-      call: Call,
-    },
+    details: Call,
     result: boolean | void,
   },
   'make-call': {
