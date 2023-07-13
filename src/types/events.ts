@@ -10,7 +10,7 @@ type GlobalEventsMap = {
   },
   'logged-out': {
     parameters: [],
-    details: {},
+    details: null,
     result: boolean | void,
   },
   'number-entry': {
@@ -69,6 +69,11 @@ type GlobalEventsMap = {
       log: Log,
     },
     result: boolean | void,
+  },
+  config: {
+    parameters: [config: Config],
+    details: Config,
+    result: boolean | void,
   }
 };
 
@@ -78,10 +83,17 @@ export interface CallInfo {
   type?: string;
 }
 
+export interface Config {
+  enableLog?: boolean;
+  enableLogDescription?: boolean;
+  enableLogResult?: boolean;
+}
+
 export type Log = {
   call: Call,
   duration: number,
   subject: string,
+  description: string,
   comment: string,
   result: string,
   recordId: string,

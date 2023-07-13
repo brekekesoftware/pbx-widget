@@ -1,4 +1,5 @@
-import { logState } from '@/state/atoms/logState';
+import { configState } from '@/state/configState';
+import { logState } from '@/state/logState';
 import { Log } from '@/types/events';
 import { Transition } from '@headlessui/react';
 import { useObserver } from 'mobx-react';
@@ -9,6 +10,9 @@ const Log = () => {
   const currentLog = useObserver(() => logState.currentLog);
   const disableSubmit = useObserver(() => !logState.canSubmit);
   const submitted = useObserver(() => logState.submitted);
+
+  const descriptionEnabled = useObserver(() => configState.logDescriptionEnabled);
+  const resultEnabled = useObserver(() => configState.logResultEnabled);
 
   const [log, setLog] = useState(() => currentLog ?? {} as Log);
 
@@ -38,8 +42,7 @@ const Log = () => {
           enterTo="opacity-100"
           leave="ease-in duration-200"
           leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
+          leaveTo="opacity-0">
           <div className="absolute inset-0 bg-black/5" onClick={logState.close} />
         </Transition.Child>
 
@@ -50,10 +53,9 @@ const Log = () => {
           enterTo="opacity-100 scale-100"
           leave="ease-in duration-200"
           leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
+          leaveTo="opacity-0 scale-95">
           <div className="bg-white shadow absolute z-50 inset-x-0 bottom-0 p-2 rounded-sm">
-            <form onSubmit={submit} className='space-y-2 p-2 pb-6'>
+            <form onSubmit={submit} className="space-y-2 p-2 pb-6">
               <input
                 type="text"
                 value={log?.subject}
@@ -62,6 +64,16 @@ const Log = () => {
                 className='disabled:bg-gray-100 w-full rounded border border-gray-300 p-2 py-1'
                 onChange={event => updateLog('subject', event.target.value)}
               />
+              {descriptionEnabled && (
+                <input
+                  type="text"
+                  value={log?.description}
+                  disabled={submitted}
+                  placeholder="Description"
+                  className="disabled:bg-gray-100 w-full rounded border border-gray-300 p-2 py-1"
+                  onChange={event => updateLog('description', event.target.value)}
+                />
+              )}
               <textarea
                 className='disabled:bg-gray-100 w-full rounded border border-gray-300 p-2 py-1'
                 placeholder='Comment'
@@ -69,15 +81,20 @@ const Log = () => {
                 onChange={event => updateLog('comment', event.target.value)}
                 value={log?.comment}
               />
-              <input
-                className='disabled:bg-gray-100 w-full rounded border border-gray-300 p-2 py-1'
-                type="text"
-                disabled={submitted}
-                value={log?.result}
-                placeholder="Result"
-                onChange={event => updateLog('result', event.target.value)}
-              />
-              <button disabled={disableSubmit} type="submit" className='bg-app disabled:bg-gray-200 disabled:text-black py-1 rounded font-bold uppercase text-white w-full'>
+              {resultEnabled && (
+                <input
+                  type="text"
+                  value={log?.result}
+                  disabled={submitted}
+                  placeholder="Result"
+                  className='disabled:bg-gray-100 w-full rounded border border-gray-300 p-2 py-1'
+                  onChange={event => updateLog('result', event.target.value)}
+                />
+              )}
+              <button
+                disabled={disableSubmit}
+                type="submit"
+                className='bg-app disabled:bg-gray-200 disabled:text-black py-1 rounded font-bold uppercase text-white w-full'>
                 Submit
               </button>
             </form>

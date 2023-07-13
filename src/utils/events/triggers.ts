@@ -22,3 +22,5 @@ export const fireCallInfoEvent: GlobalEventTrigger<'call-info'> = (call, info) =
 export const fireLogEvent: GlobalEventTrigger<'log'> = (log) => fireEvent('log', { log });
 export const fireLogSavedEvent: GlobalEventTrigger<'log-saved'> = (log) => fireEvent('log-saved', { log });
 
+export const fireConfigEvent: GlobalEventTrigger<'config'> = config => fireEvent('config', config);
+

@@ -1,8 +1,8 @@
-import { logState } from '@/state/atoms/logState';
 import { authState } from '@/state/authState';
 import { callsState } from '@/state/callsState';
+import { logState } from '@/state/logState';
 import { AuthData } from '@/types/app';
-import { Pbx, PbxEvent } from '@/types/brekekejs';
+import { Pbx } from '@/types/brekekejs';
 import { Call, Phone } from '@/types/phone';
 import { onMakeCallEvent } from '@/utils/events/listeners';
 import { fireCallEndedEvent, fireCallEvent, fireCallUpdatedEvent } from '@/utils/events/triggers';

@@ -1,14 +1,16 @@
+import NoteIcon from '@/assets/icons/note.svg';
 import Duration from '@/components/Duration';
 import { pbx } from '@/services/pbx';
-import { logState } from '@/state/atoms/logState';
 import { callsState } from '@/state/callsState';
+import { configState } from '@/state/configState';
+import { logState } from '@/state/logState';
 import { Call } from '@/types/phone';
 import { PhoneIcon } from '@heroicons/react/24/solid';
 import { useObserver } from 'mobx-react';
-import NoteIcon from '@/assets/icons/note.svg';
 
 const CallLog = () => {
   const calls = useObserver(() => callsState.inactiveCalls);
+  const logEnabled = useObserver(() => configState.logEnabled);
 
   const renderDuration = (call: Call) => {
     if (!call.answered) return null;
@@ -39,9 +41,11 @@ const CallLog = () => {
           <button className='h-6 w-6 p-1 rounded-full' onClick={() => pbx.call(call.partyNumber)} title='Dial'>
             <PhoneIcon className='text-green-400 h-4 w-4' />
           </button>
-          <button onClick={() => logState.open(call)} title='Note'>
-            <img className='h-6 w-6' src={NoteIcon} alt="note" />
-          </button>
+          {logEnabled && (
+            <button onClick={() => logState.open(call)} title='Note'>
+              <img className='h-6 w-6' src={NoteIcon} alt="note" />
+            </button>
+          )}
         </div>
       </div>
     );

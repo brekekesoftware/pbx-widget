@@ -6,7 +6,12 @@ import {
   onLoggedInEvent,
   onLoggedOutEvent,
 } from '@core/utils/events/listeners';
-import { fireCallInfoEvent, fireLogSavedEvent, fireMakeCallEvent } from '@core/utils/events/triggers';
+import {
+  fireCallInfoEvent,
+  fireConfigEvent,
+  fireLogSavedEvent,
+  fireMakeCallEvent,
+} from '@core/utils/events/triggers';
 
 declare global {
   interface Window {
@@ -24,6 +29,7 @@ type WidgetCallbackParams = {
   onLoggedOutEvent: typeof onLoggedOutEvent;
   // Triggers
   fireCallInfoEvent: typeof fireCallInfoEvent;
+  fireConfigEvent: typeof fireConfigEvent;
   fireLogSavedEvent: typeof fireLogSavedEvent;
   fireMakeCallEvent: typeof fireMakeCallEvent;
 }

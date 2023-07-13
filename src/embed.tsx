@@ -7,7 +7,12 @@ import {
   onLoggedInEvent,
   onLoggedOutEvent,
 } from '@/utils/events/listeners';
-import { fireCallInfoEvent, fireLogSavedEvent, fireMakeCallEvent } from '@/utils/events/triggers';
+import {
+  fireCallInfoEvent,
+  fireConfigEvent,
+  fireLogSavedEvent,
+  fireMakeCallEvent,
+} from '@/utils/events/triggers';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -17,6 +22,7 @@ export const embedWidgetRender = () => {
 
     callback({
       fireCallInfoEvent,
+      fireConfigEvent,
       fireLogSavedEvent,
       fireMakeCallEvent,
       onCallEvent,

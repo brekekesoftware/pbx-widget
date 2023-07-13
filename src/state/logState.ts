@@ -61,11 +61,12 @@ export class LogState {
     return this.callsLog[call.id] ??= {
       call: call,
       duration: 0,
+      subject: `Call on ${new Date(call.createdAt).toUTCString()}`,
       comment: '',
+      description: '',
+      result: '',
       recordId: callsState.callsInfo[call.id]?.id ?? '',
       recordType: callsState.callsInfo[call.id]?.type,
-      result: '',
-      subject: `Call on ${new Date(call.createdAt).toUTCString()}`,
       tenant: authState.account?.pbxTenant ?? '',
       user: authState.account!.pbxUsername
     };

@@ -1,6 +1,7 @@
 import Keypad from '@/components/Keypad';
 import { pbx } from '@/services/pbx';
-import { logState } from '@/state/atoms/logState';
+import { configState } from '@/state/configState';
+import { logState } from '@/state/logState';
 import { callsState } from '@/state/callsState';
 import { Call } from '@/types/phone';
 import { PhoneIcon, PhoneXMarkIcon } from '@heroicons/react/24/solid';
@@ -21,6 +22,7 @@ interface Props {
 }
 
 const CallItem: FC<Props> = observer(({ call }) => {
+  const logEnabled = useObserver(() => configState.logEnabled);
   const [holding, setHolding] = useState(call.holding);
   const [muted, setMuted] = useState(call.muted);
   const [recording, setRecording] = useState(call.recording);
@@ -207,9 +209,11 @@ const CallItem: FC<Props> = observer(({ call }) => {
         <button onClick={openBlindTransfer} title="Blind transfer">
           <img className="h-6 w-6" src={BlindTransferIcon} alt="blind transfer" />
         </button>
-        <button onClick={openLog} title="Note">
-          <img className="h-6 w-6" src={NoteIcon} alt="note" />
-        </button>
+        {logEnabled && (
+          <button onClick={openLog} title="Note">
+            <img className="h-6 w-6" src={NoteIcon} alt="note" />
+          </button>
+        )}
       </div>
     );
   };
