@@ -9,7 +9,7 @@ export const fireMakeCallEvent: GlobalEventTrigger<'make-call'> = (number: strin
   return fireEvent('make-call', { number });
 }
 
-export const fireNumberEntryEvent: GlobalEventTrigger<'number-entry'> = (number) => fireEvent('number-entry', { number });
+export const fireNumberEntryEvent: GlobalEventTrigger<'number-entry'> = number => fireEvent('number-entry', number);
 
 export const fireCallUpdatedEvent: GlobalEventTrigger<'call-updated'> = (call) => fireEvent('call-updated', { call });
 export const fireCallEndedEvent: GlobalEventTrigger<'call-ended'> = (call) => fireEvent('call-ended', { call });

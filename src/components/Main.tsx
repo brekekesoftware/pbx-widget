@@ -18,7 +18,7 @@ const Main = () => {
   const [value, setValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => onNumberEntry((e) => setValue(e.number)), []);
+  useEffect(() => onNumberEntry(setValue), []);
 
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);

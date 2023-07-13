@@ -13,9 +13,7 @@ type GlobalEventsMap = {
   },
   'number-entry': {
     parameters: [number: string],
-    details: {
-      number: string,
-    },
+    details: string,
     result: boolean | void,
   },
   call: {
