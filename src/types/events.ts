@@ -3,9 +3,7 @@ import { Account, Call } from '@core/types/phone';
 type GlobalEventsMap = {
   'logged-in': {
     parameters: [account: Account],
-    details: {
-      account: Account,
-    },
+    details: Account,
     result: boolean | void,
   },
   'logged-out': {

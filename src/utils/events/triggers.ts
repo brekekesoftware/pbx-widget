@@ -14,7 +14,7 @@ export const fireNumberEntryEvent: GlobalEventTrigger<'number-entry'> = (number)
 export const fireCallUpdatedEvent: GlobalEventTrigger<'call-updated'> = (call) => fireEvent('call-updated', { call });
 export const fireCallEndedEvent: GlobalEventTrigger<'call-ended'> = (call) => fireEvent('call-ended', { call });
 
-export const fireLoggedInEvent: GlobalEventTrigger<'logged-in'> = (account) => fireEvent('logged-in', { account });
+export const fireLoggedInEvent: GlobalEventTrigger<'logged-in'> = account => fireEvent('logged-in', account);
 export const fireLoggedOutEvent: GlobalEventTrigger<'logged-out'> = () => fireEvent('logged-out');
 
 export const fireCallInfoEvent: GlobalEventTrigger<'call-info'> = (call, info) => fireEvent('call-info', { call, info });
