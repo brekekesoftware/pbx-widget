@@ -23,6 +23,8 @@ interface Props {
 
 const CallItem: FC<Props> = observer(({ call }) => {
   const logEnabled = useObserver(() => configState.logEnabled);
+  const logButtonTitle = useObserver(() => configState.logButtonTitle);
+
   const [holding, setHolding] = useState(call.holding);
   const [muted, setMuted] = useState(call.muted);
   const [recording, setRecording] = useState(call.recording);
@@ -210,8 +212,8 @@ const CallItem: FC<Props> = observer(({ call }) => {
           <img className="h-6 w-6" src={BlindTransferIcon} alt="blind transfer" />
         </button>
         {logEnabled && (
-          <button onClick={openLog} title="Note">
-            <img className="h-6 w-6" src={NoteIcon} alt="note" />
+          <button onClick={openLog} title={logButtonTitle}>
+            <img className="h-6 w-6" src={NoteIcon} alt={logButtonTitle} />
           </button>
         )}
       </div>

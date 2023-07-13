@@ -17,12 +17,17 @@ export class ConfigState {
     return this._config?.enableLogResult ?? true;
   }
 
+  get logButtonTitle() {
+    return this._config?.logButtonTitle ?? 'Note';
+  }
+
   constructor() {
     makeObservable(this, {
       _config: observable,
       logEnabled: computed,
       logDescriptionEnabled: computed,
       logResultEnabled: computed,
+      logButtonTitle: computed,
       config: action,
     });
 

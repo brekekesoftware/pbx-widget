@@ -71,6 +71,7 @@ export interface Config {
   enableLog?: boolean;
   enableLogDescription?: boolean;
   enableLogResult?: boolean;
+  logButtonTitle?: string;
 }
 
 export type Log = {

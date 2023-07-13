@@ -11,6 +11,7 @@ import { useObserver } from 'mobx-react';
 const CallLog = () => {
   const calls = useObserver(() => callsState.inactiveCalls);
   const logEnabled = useObserver(() => configState.logEnabled);
+  const logButtonTitle = useObserver(() => configState.logButtonTitle);
 
   const renderDuration = (call: Call) => {
     if (!call.answered) return null;
@@ -42,8 +43,8 @@ const CallLog = () => {
             <PhoneIcon className='text-green-400 h-4 w-4' />
           </button>
           {logEnabled && (
-            <button onClick={() => logState.open(call)} title='Note'>
-              <img className='h-6 w-6' src={NoteIcon} alt="note" />
+            <button onClick={() => logState.open(call)} title={logButtonTitle}>
+              <img className='h-6 w-6' src={NoteIcon} alt={logButtonTitle} />
             </button>
           )}
         </div>
