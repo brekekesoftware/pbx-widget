@@ -33,9 +33,7 @@ type GlobalEventsMap = {
   },
   'make-call': {
     parameters: [number: string],
-    details: {
-      number: string,
-    },
+    details: string,
     result: boolean | void,
   },
   'call-info': {

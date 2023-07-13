@@ -70,10 +70,10 @@ export class PBX {
       logger('phone.on(pal)', { account, pal });
       authState.login(account, () => {
         this.listeners.push(
-          onMakeCallEvent(event => {
-            logger('onMakeCallEvent', event);
+          onMakeCallEvent(number => {
+            logger('onMakeCallEvent', number);
 
-            phone.call(event.number);
+            phone.call(number);
           }),
         );
       });

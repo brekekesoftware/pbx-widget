@@ -1,9 +1,7 @@
 import { GlobalEventTrigger } from '@core/types/events';
 import { fireEvent } from '@core/utils/events/common';
 
-export const fireMakeCallEvent: GlobalEventTrigger<'make-call'> = (number: string) => {
-  return fireEvent('make-call', { number });
-}
+export const fireMakeCallEvent: GlobalEventTrigger<'make-call'> = number => fireEvent('make-call', number);
 
 export const fireNumberEntryEvent: GlobalEventTrigger<'number-entry'> = number => fireEvent('number-entry', number);
 
