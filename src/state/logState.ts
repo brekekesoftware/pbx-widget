@@ -46,7 +46,7 @@ export class LogState {
       saveLog: action,
     });
 
-    onLogSavedEvent(e => this.saveLog(e.log));
+    onLogSavedEvent(this.saveLog);
   }
 
   open = (call: Call) => {

@@ -46,16 +46,12 @@ type GlobalEventsMap = {
   },
   log: {
     parameters: [log: Log],
-    details: {
-      log: Log,
-    },
+    details: Log,
     result: boolean | void,
   },
   'log-saved': {
     parameters: [log: Log],
-    details: {
-      log: Log,
-    },
+    details: Log,
     result: boolean | void,
   },
   config: {
