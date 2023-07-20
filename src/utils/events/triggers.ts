@@ -19,3 +19,5 @@ export const fireLogSavedEvent: GlobalEventTrigger<'log-saved'> = log => fireEve
 
 export const fireConfigEvent: GlobalEventTrigger<'config'> = config => fireEvent('config', config);
 
+export const fireCallRecordedEvent: GlobalEventTrigger<'call-recorded'> = e => fireEvent('call-recorded', e);
+

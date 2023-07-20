@@ -59,6 +59,11 @@ type GlobalEventsMap = {
     details: Config,
     result: boolean | void,
   }
+  'call-recorded': {
+    parameters: [data: CallRecord],
+    details: CallRecord,
+    result: boolean | void,
+  }
 };
 
 export interface CallInfo {
@@ -86,6 +91,12 @@ export type Log = {
   relatedRecordId?: string,
   tenant: string,
   user: string,
+}
+
+export interface CallRecord {
+  roomId: string;
+  recordingId: string;
+  recordingURL: string;
 }
 
 export type GlobalEventNames = keyof GlobalEventsMap;

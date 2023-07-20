@@ -5,7 +5,12 @@ import { AuthData } from '@/types/app';
 import { Pbx } from '@/types/brekekejs';
 import { Call, Phone } from '@/types/phone';
 import { onMakeCallEvent } from '@/utils/events/listeners';
-import { fireCallEndedEvent, fireCallEvent, fireCallUpdatedEvent } from '@/utils/events/triggers';
+import {
+  fireCallEndedEvent,
+  fireCallEvent,
+  fireCallRecordedEvent,
+  fireCallUpdatedEvent,
+} from '@/utils/events/triggers';
 import { logger } from '@/utils/logger';
 
 export class PBX {
@@ -38,11 +43,11 @@ export class PBX {
         'onError',
         'notify_serverstatus',
         'notify_status',
-        // ...
       ],
+      'webphone.pal.param.user': '*',
     });
 
-    console.log('phone', phone, el);
+    logger('phone', phone, el);
 
     // @ts-ignore
     phone.on('pal.onError', e => {
@@ -63,7 +68,21 @@ export class PBX {
     phone.on('pal.notify_serverstatus', e => logger('phone.on(pal.notify_serverstatus)', e));
 
     // @ts-ignore
-    phone.on('pal.notify_status', e => logger('phone.on(pal.notify_status)', e));
+    phone.on('pal.notify_status', e => {
+      logger('phone.on(pal.notify_status)', e);
+      const { status, rec, room_id } = e;
+
+      if (status === '-1' && rec && room_id) {
+        // https://127.0.0.1:8443/pbx/rec/fd60464ad65ef63400dba80cbd63f05b3d665c0f7f982b64f13bfdd3156824b2
+        const url = `https://${auth.host}:${auth.port}/pbx/rec/${rec}`;
+        logger('phone.on(recorded)', { status, rec, room_id, url });
+        fireCallRecordedEvent({
+          roomId: room_id,
+          recordingId: rec,
+          recordingURL: url,
+        });
+      }
+    });
 
     phone.on('pal', (pal) => {
       const account = phone.getCurrentAccount();
@@ -93,17 +112,17 @@ export class PBX {
   };
 
   private onCall = (call: Call) => {
-    logger('call', call);
+    logger('phone.on.call', call);
     fireCallEvent(call);
   }
 
   private onCallUpdated = (call: Call) => {
-    logger('call_update', call);
+    logger('phone.on.call_updated', call);
     fireCallUpdatedEvent(call);
   }
 
   private onCallEnded = (call: Call) => {
-    logger('call_end', call);
+    logger('phone.on.call_end', call);
     fireCallEndedEvent(call);
   }
 

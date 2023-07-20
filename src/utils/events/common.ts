@@ -8,9 +8,9 @@ import { logger } from '@core/utils/logger';
 
 const prefix = 'brekeke';
 
-export const fireEvent = <TEventName extends GlobalEventNames>(name: TEventName, detail: CustomEventInit<GlobalEventDetails<TEventName>>['detail'] = {}) => {
+export const fireEvent = <TEventName extends GlobalEventNames>(name: TEventName, detail: GlobalEventDetails<TEventName> = {}) => {
   logger(`fired-${name}`, detail);
-  return document.dispatchEvent(new CustomEvent<GlobalEventDetails<TEventName>>(`${prefix}:${name}`, { detail }));
+  return document.dispatchEvent(new CustomEvent<typeof detail>(`${prefix}:${name}`, { detail }));
 };
 
 export const onEvent = <TEventName extends GlobalEventNames>(name: TEventName, callback: GlobalEventCallback<TEventName>): VoidFunction => {
