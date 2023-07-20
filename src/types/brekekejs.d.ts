@@ -49,6 +49,10 @@ export type Brekeke = {
   Phonebook: Phonebook
   WebNotification: WebNotification
   renderWidget: (el: HTMLElement, callback: WidgetCallback) => void;
+  widget: {
+    render: (el: HTMLElement) => void;
+    events: (callback: WidgetCallback) => void;
+  }
 }
 export type WebNotification = {
   requestPermission(Options: OptionRequestNotification): void

@@ -1,4 +1,5 @@
 import App from '@/App';
+import { WidgetCallback } from '@/types/brekekejs';
 import {
   onCallEndedEvent,
   onCallEvent,
@@ -17,9 +18,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 export const embedWidgetRender = () => {
-  window.Brekeke.renderWidget = (el, callback) => {
-    ReactDOM.createRoot(el).render(<React.StrictMode><App /></React.StrictMode>);
-
+  const initCallback = (callback: WidgetCallback) => {
     callback({
       fireCallInfoEvent,
       fireConfigEvent,
@@ -32,6 +31,20 @@ export const embedWidgetRender = () => {
       onLoggedInEvent,
       onLoggedOutEvent,
     });
+  };
+
+  const initWidget = (el: HTMLElement) => {
+    ReactDOM.createRoot(el).render(<React.StrictMode><App /></React.StrictMode>);
+  };
+
+  window.Brekeke.renderWidget = (el, callback) => {
+    initWidget(el);
+    initCallback(callback);
+  };
+
+  window.Brekeke.widget = {
+    render: initWidget,
+    events: initCallback,
   };
 };
 
