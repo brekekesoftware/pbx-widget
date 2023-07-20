@@ -1,6 +1,7 @@
 import {
   onCallEndedEvent,
   onCallEvent,
+  onCallRecordedEvent,
   onCallUpdatedEvent,
   onLogEvent,
   onLoggedInEvent,
@@ -23,6 +24,7 @@ type WidgetCallbackParams = {
   // Listeners
   onCallEndedEvent: typeof onCallEndedEvent;
   onCallEvent: typeof onCallEvent;
+  onCallRecordedEvent: typeof onCallRecordedEvent;
   onCallUpdatedEvent: typeof onCallUpdatedEvent;
   onLogEvent: typeof onLogEvent;
   onLoggedInEvent: typeof onLoggedInEvent;

@@ -3,6 +3,7 @@ import { WidgetCallback } from '@/types/brekekejs';
 import {
   onCallEndedEvent,
   onCallEvent,
+  onCallRecordedEvent,
   onCallUpdatedEvent,
   onLogEvent,
   onLoggedInEvent,
@@ -26,6 +27,7 @@ export const embedWidgetRender = () => {
       fireMakeCallEvent,
       onCallEvent,
       onCallEndedEvent,
+      onCallRecordedEvent,
       onCallUpdatedEvent,
       onLogEvent,
       onLoggedInEvent,
