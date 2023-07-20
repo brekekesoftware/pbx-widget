@@ -44,6 +44,7 @@ This renders the widget on the given element and calls the callback with a set o
         document.getElementById('widget_embed_div'),
         ({
            fireCallInfoEvent,
+           fireConfigEvent,
            fireLogSavedEvent,
            fireMakeCallEvent,
            onCallUpdatedEvent,
@@ -66,12 +67,14 @@ This renders the widget on the given element and calls the callback with a set o
 The callback parameter of the `renderWidget` method exposes a set of event triggers and listeners which can be used to communicate between the widget and your app.
 
 - `fireCallInfoEvent` - Triggers the `onCallInfoEvent` listener with the call and info objects as the parameters.
+- `fireConfigEvent` - Triggers the `onCallInfoEvent` listener with the config object as the parameters.
 - `fireLogSavedEvent` - Triggers the `onLogSavedEvent` listener with the log object as the parameter.
 - `fireMakeCallEvent` - Triggers the `onMakeCallEvent` listener with the phone number as the parameter.
-- `onCallEvent` - Listener for the call event. The callback is called with the call object in the event parameter.
-- `onCallUpdatedEvent` - Listener for the call updated event. The callback is called with the call object in the event parameter.
-- `onCallEndedEvent` - Listener for the call ended event. The callback is called with the call object in the event parameter.
+- `onCallEvent` - Listener for the call event. The callback is called with the call object as the event parameter.
+- `onCallUpdatedEvent` - Listener for the call updated event. The callback is called with the call object as the event parameter.
+- `onCallEndedEvent` - Listener for the call ended event. The callback is called with the call object as the event parameter.
+- `onCallRecordedEvent` - Listener for the call recorded event. The callback is called with the record object as the event parameter.
 - `onLoggedOutEvent` - Listener for the logged out event.
-- `onLoggedInEvent` - Listener for the logged in event.
-- `onLogEvent` - Listener for the log event. The callback is called with the log object in the event parameter.
+- `onLoggedInEvent` - Listener for the logged in event. The callback is called with the account object as the event parameter.
+- `onLogEvent` - Listener for the log event. The callback is called with the log object as the event parameter.
 
