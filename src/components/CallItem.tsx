@@ -1,21 +1,22 @@
+import AttendedTransferIcon from '@/assets/icons/attended-transfer.svg';
+import BlindTransferIcon from '@/assets/icons/blind-transfer.svg';
+import MicOffIcon from '@/assets/icons/mic-off.svg';
+import MicIcon from '@/assets/icons/mic.svg';
+import NoteIcon from '@/assets/icons/note.svg';
+import PauseIcon from '@/assets/icons/pause.svg';
+import PlayIcon from '@/assets/icons/play.svg';
+import CallContacts from '@/components/CallContacts';
 import Keypad from '@/components/Keypad';
-import { pbx } from '@/services/pbx';
+import { callsState } from '@/state/callsState';
 import { configState } from '@/state/configState';
 import { logState } from '@/state/logState';
-import { callsState } from '@/state/callsState';
 import { Call } from '@/types/phone';
+import { onContactSelectedEvent } from '@/utils/events/listeners';
+import { c } from '@/utils/html-class';
 import { PhoneIcon, PhoneXMarkIcon } from '@heroicons/react/24/solid';
-import { autorun } from 'mobx';
 import { observer, useObserver } from 'mobx-react';
 import React, { FC, useEffect, useState } from 'react';
 import Duration from './Duration';
-import AttendedTransferIcon from '@/assets/icons/attended-transfer.svg';
-import BlindTransferIcon from '@/assets/icons/blind-transfer.svg';
-import MicIcon from '@/assets/icons/mic.svg';
-import MicOffIcon from '@/assets/icons/mic-off.svg';
-import PauseIcon from '@/assets/icons/pause.svg';
-import PlayIcon from '@/assets/icons/play.svg';
-import NoteIcon from '@/assets/icons/note.svg';
 
 interface Props {
   call: Call;
@@ -24,6 +25,14 @@ interface Props {
 const CallItem: FC<Props> = observer(({ call }) => {
   const logEnabled = useObserver(() => configState.logEnabled);
   const logButtonTitle = useObserver(() => configState.logButtonTitle);
+  const hasMultipleContacts = useObserver(() => callsState.callHasMultipleContacts(call));
+
+  const [showHelp, setShowHelp] = useState(true);
+
+  useEffect(() => onContactSelectedEvent(e => {
+    if (call.pbxRoomId !== e.call.pbxRoomId) return;
+    setShowHelp(false);
+  }), []);
 
   const [holding, setHolding] = useState(call.holding);
   const [muted, setMuted] = useState(call.muted);
@@ -119,6 +128,11 @@ const CallItem: FC<Props> = observer(({ call }) => {
     void call.conferenceTransferring();
   }
 
+  const preventContactClickPropagation: React.MouseEventHandler = (e) => {
+    if (!hasMultipleContacts) return;
+    e.stopPropagation();
+  }
+
   const renderAnswer = () => {
     if (!call.incoming || call.answered) return null;
 
@@ -178,10 +192,17 @@ const CallItem: FC<Props> = observer(({ call }) => {
     return (
       <div className="flex gap-2 p-2 items-center">
         <div className="grow">
-          <div className="font-bold">
-            {displayName ?? call.getDisplayName()}
-            {displayName && <span className="ml-2 text-xs font-normal">({call.partyNumber})</span>}
-          </div>
+          <CallContacts call={call} disabled={!hasMultipleContacts}>
+            {({ open }) => (
+              <div
+                onClick={preventContactClickPropagation}
+                className={c('font-bold', { 'transition-all cursor-pointer rounded hover:bg-app/20 hover:p-1': hasMultipleContacts, 'rounded bg-app/20 p-1': open })}>
+                {displayName ?? call.getDisplayName()}
+                {displayName && <span className="ml-2 text-xs font-normal">({call.partyNumber})</span>}
+                {(hasMultipleContacts && showHelp) && <p className="text-[10px] font-normal">Click to select contact</p>}
+              </div>
+            )}
+          </CallContacts>
           {renderStatus()}
         </div>
         {renderAnswer()}

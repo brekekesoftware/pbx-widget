@@ -6,6 +6,7 @@ import {
   onLogEvent,
   onLoggedInEvent,
   onLoggedOutEvent,
+  onContactSelectedEvent,
 } from '@core/utils/events/listeners';
 import {
   fireCallInfoEvent,
@@ -29,6 +30,7 @@ type WidgetCallbackParams = {
   onLogEvent: typeof onLogEvent;
   onLoggedInEvent: typeof onLoggedInEvent;
   onLoggedOutEvent: typeof onLoggedOutEvent;
+  onContactSelectedEvent: typeof onContactSelectedEvent;
   // Triggers
   fireCallInfoEvent: typeof fireCallInfoEvent;
   fireConfigEvent: typeof fireConfigEvent;

@@ -20,3 +20,5 @@ export const onLogSavedEvent = (callback: GlobalEventCallback<'log-saved'>) => o
 export const onConfigEvent = (callback: GlobalEventCallback<'config'>) => onEvent('config', callback);
 
 export const onCallRecordedEvent = (callback: GlobalEventCallback<'call-recorded'>) => onEvent('call-recorded', callback);
+
+export const onContactSelectedEvent = (callback: GlobalEventCallback<'contact-selected'>) => onEvent('contact-selected', callback);

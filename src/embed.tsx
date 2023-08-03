@@ -8,6 +8,7 @@ import {
   onLogEvent,
   onLoggedInEvent,
   onLoggedOutEvent,
+  onContactSelectedEvent,
 } from '@/utils/events/listeners';
 import {
   fireCallInfoEvent,
@@ -32,6 +33,7 @@ export const embedWidgetRender = () => {
       onLogEvent,
       onLoggedInEvent,
       onLoggedOutEvent,
+      onContactSelectedEvent,
     });
   };
 

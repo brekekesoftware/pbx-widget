@@ -1,6 +1,6 @@
 import { authState } from '@/state/authState';
 import { callsState } from '@/state/callsState';
-import { Log } from '@/types/events';
+import { Contact, Log } from '@/types/events';
 import { Call } from '@/types/phone';
 import { onLogSavedEvent } from '@/utils/events/listeners';
 import { fireLogEvent } from '@/utils/events/triggers';
@@ -25,7 +25,7 @@ export class LogState {
 
   get canSubmit() {
     if (this.current === undefined) return false;
-    return !this.savedLogs[this.current.id] && callsState.callEnded(this.current);
+    return !this.savedLogs[this.current.id] && callsState.callHasEnded(this.current);
   }
 
   constructor() {
@@ -44,6 +44,7 @@ export class LogState {
       updateLog: action,
       submitLog: action,
       saveLog: action,
+      contactSelected: action,
     });
 
     onLogSavedEvent(this.saveLog);
@@ -57,6 +58,15 @@ export class LogState {
     this.current = undefined;
   }
 
+  contactSelected = (call: Call, contact: Contact) => {
+    if (this.callLogSaved(call)) return;
+    const log = this.callsLog[call.id];
+    if (log === undefined) return;
+    log.recordId = contact.id;
+    log.recordType = contact.type;
+    this.callsLog[call.id] = log;
+  }
+
   getLog = (call: Call) => {
     return this.callsLog[call.id] ??= {
       call: call,
@@ -65,8 +75,8 @@ export class LogState {
       comment: '',
       description: '',
       result: '',
-      recordId: callsState.callsInfo[call.id]?.id ?? '',
-      recordType: callsState.callsInfo[call.id]?.type,
+      recordId: callsState.callsContact[call.id]?.id ?? '',
+      recordType: callsState.callsContact[call.id]?.type,
       tenant: authState.account?.pbxTenant ?? '',
       user: authState.account!.pbxUsername
     };
@@ -82,7 +92,7 @@ export class LogState {
   submitLog = () => {
     if (this.current === undefined) return;
     const log = this.getLog(this.current);
-    log.duration = callsState.callDuration(this.current);
+    log.duration = callsState.endedCallDuration(this.current);
     fireLogEvent(log);
   }
 
@@ -92,6 +102,8 @@ export class LogState {
       this.close();
     }
   }
+
+  callLogSaved = (call: Call) => this.savedLogs[call.id] ?? false;
 
   reset = () => {
     this.callsLog = {};

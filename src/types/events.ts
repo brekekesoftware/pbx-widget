@@ -44,6 +44,14 @@ type GlobalEventsMap = {
     },
     result: boolean | void,
   },
+  'contact-selected': {
+    parameters: [call: Call, contact: Contact],
+    details: {
+      call: Call,
+      contact: Contact,
+    },
+    result: boolean | void,
+  },
   log: {
     parameters: [log: Log],
     details: Log,
@@ -66,11 +74,13 @@ type GlobalEventsMap = {
   }
 };
 
-export interface CallInfo {
+export interface Contact {
   id: string;
   name: string;
   type?: string;
 }
+
+export type CallInfo = Contact | Contact[];
 
 export interface Config {
   enableLog?: boolean;
