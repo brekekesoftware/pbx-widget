@@ -20,7 +20,7 @@ const CallLog = () => {
         Calls ({calls.length})
       </p>
       <div className='divide-y'>
-        {calls.map(call => <EndedCall call={call} />)}
+        {calls.map(call => <EndedCall call={call} key={call.pbxRoomId} />)}
       </div>
     </div>
   );
@@ -49,7 +49,7 @@ const EndedCall: FC<EndedCallProps> = ({ call }) => {
   }
 
   return (
-    <div key={call.id} className='bg-white p-1.5 flex justify-between'>
+    <div className='bg-white p-1.5 flex justify-between'>
       <div>
         <CallContacts call={call} disabled={!hasMultipleContacts || saved}>
           {({ open }) => (
