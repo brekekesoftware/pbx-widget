@@ -3,7 +3,8 @@ import { Contact } from '@/types/events';
 import { Call } from '@/types/phone';
 import { c } from '@/utils/html-class';
 import { logger } from '@/utils/logger';
-import { Menu, Transition } from '@headlessui/react';
+import { Float } from '@headlessui-float/react';
+import { Menu } from '@headlessui/react';
 import { useObserver } from 'mobx-react';
 import React, { FC, Fragment } from 'react';
 
@@ -44,22 +45,26 @@ const CallContacts: FC<Props> = ({ call, disabled, children }) => {
 
   return (
     <Menu>
-      <Menu.Button as={Fragment} disabled={disabled}>{children}</Menu.Button>
+      <Float
+        placement="bottom-end"
+        flip
+        offset={{ alignmentAxis: 10, mainAxis: 4 }}
+        transform={false}
+        floatingAs={Fragment}
+        enter="transition duration-100 ease-out"
+        enterFrom="opacity-0 scale-95"
+        enterTo="opacity-100 scale-100"
+        leave="transition duration-75 ease-in"
+        leaveFrom="opacity-100 scale-100"
+        leaveTo="opacity-0 scale-95"
+        tailwindcssOriginClass>
+        <Menu.Button as={Fragment} disabled={disabled}>{children}</Menu.Button>
 
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
         <Menu.Items
-          className="px-1 py-1 absolute z-50 right-2 mt-2 w-56 origin-top-right space-y-1 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          className="px-1 py-1 w-56 space-y-1 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {renderContacts()}
         </Menu.Items>
-      </Transition>
+      </Float>
     </Menu>
   );
 };

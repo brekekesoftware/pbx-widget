@@ -1,4 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+const { tailwindcssOriginSafelist } = require('@headlessui-float/react');
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -6,6 +7,7 @@ export default {
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
+  safelist: [...tailwindcssOriginSafelist],
   theme: {
     extend: {
       fontFamily: {
