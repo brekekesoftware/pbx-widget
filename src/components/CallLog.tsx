@@ -59,19 +59,19 @@ const EndedCall: FC<EndedCallProps> = ({ call }) => {
 
   return (
     <div className='bg-white p-1.5 flex justify-between'>
-      <div>
+      <div className='truncate mr-1.5'>
         <CallContacts call={call} disabled={!hasMultipleContacts || saved}>
           {({ open }) => (
-            <p className={c('font-bold text-sm', { 'transition-all cursor-pointer rounded hover:bg-app/20 hover:p-1': hasMultipleContacts && !saved, 'rounded bg-app/20 p-1': open })}>
-              {displayName ?? call.getDisplayName()}
-              {displayName && <span className='font-normal text-xs ml-2'>({call.partyNumber})</span>}
-            </p>
+            <div className={c('font-bold flex items-center text-sm truncate', { 'transition-all cursor-pointer rounded hover:bg-app/20 hover:p-1': hasMultipleContacts && !saved, 'rounded bg-app/20 p-1': open })}>
+              <p className='truncate'>{displayName ?? call.getDisplayName()}</p>
+              {displayName && <span className='font-normal text-xs ml-2 shrink-0'>({call.partyNumber})</span>}
+            </div>
           )}
         </CallContacts>
         <span className="text-xs">{callStatus(call)}</span>
         {renderDuration(call)}
       </div>
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2.5 shrink-0">
         <button className='h-6 w-6 p-1 rounded-full' onClick={() => pbx.call(call.partyNumber)} title='Dial'>
           <PhoneIcon className='fill-green-400 h-4 w-4' />
         </button>

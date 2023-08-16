@@ -32,7 +32,7 @@ const CallContacts: FC<Props> = ({ call, disabled, children }) => {
             const s = selected?.id === contact.id;
             return (
               <button
-                className={c('font-medium flex flex-col w-full items-start rounded-md px-2 py-2 text-sm overflow-ellipsis whitespace-nowrap truncate transition-all', { 'bg-app text-white': active || s })}
+                className={c('font-medium flex flex-col w-full text-start rounded-md px-2 py-2 text-sm truncate transition-all', { 'bg-app text-white': active || s })}
                 onClick={e => clickContact(e, contact)}>
                 {contact.name}
                 {contact.type && <span className="text-xs font-normal">{contact.type}</span>}
