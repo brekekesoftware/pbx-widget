@@ -8,6 +8,7 @@ export const fireNumberEntryEvent: GlobalEventTrigger<'number-entry'> = number =
 export const fireCallEvent: GlobalEventTrigger<'call'> = call => fireEvent('call', call);
 export const fireCallUpdatedEvent: GlobalEventTrigger<'call-updated'> = call => fireEvent('call-updated', call);
 export const fireCallEndedEvent: GlobalEventTrigger<'call-ended'> = call => fireEvent('call-ended', call);
+export const fireDuplicateContactCallAnsweredEvent: GlobalEventTrigger<'duplicate-contact-call-answered'> = (call, contact) => fireEvent('duplicate-contact-call-answered', { call, contact });
 
 export const fireLoggedInEvent: GlobalEventTrigger<'logged-in'> = account => fireEvent('logged-in', account);
 export const fireLoggedOutEvent: GlobalEventTrigger<'logged-out'> = () => fireEvent('logged-out');

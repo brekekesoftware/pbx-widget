@@ -31,6 +31,14 @@ type GlobalEventsMap = {
     details: Call,
     result: boolean | void,
   },
+  'duplicate-contact-call-answered': {
+    parameters: [call: Call, contact?: Contact],
+    details: {
+      call: Call,
+      contact?: Contact,
+    },
+    result: boolean | void,
+  },
   'make-call': {
     parameters: [number: string],
     details: string,

@@ -12,6 +12,7 @@ import { configState } from '@/state/configState';
 import { logState } from '@/state/logState';
 import { Call } from '@/types/phone';
 import { onContactSelectedEvent } from '@/utils/events/listeners';
+import { fireDuplicateContactCallAnsweredEvent } from '@/utils/events/triggers';
 import { c } from '@/utils/html-class';
 import { PhoneIcon, PhoneXMarkIcon } from '@heroicons/react/24/solid';
 import { observer, useObserver } from 'mobx-react';
@@ -26,6 +27,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
   const logEnabled = useObserver(() => configState.logEnabled);
   const logButtonTitle = useObserver(() => configState.logButtonTitle);
   const hasMultipleContacts = useObserver(() => callsState.callHasMultipleContacts(call));
+  const selectedContact = useObserver(() => callsState.callContact(call));
 
   const [showHelp, setShowHelp] = useState(true);
 
@@ -106,6 +108,8 @@ const CallItem: FC<Props> = observer(({ call }) => {
   const answer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     call.answer();
+    if (!hasMultipleContacts) return;
+    fireDuplicateContactCallAnsweredEvent(call, selectedContact);
   }
 
   const disconnect: React.MouseEventHandler<HTMLButtonElement> = (e) => {
