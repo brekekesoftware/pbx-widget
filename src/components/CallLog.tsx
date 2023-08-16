@@ -1,4 +1,5 @@
-import NoteIcon from '@/assets/icons/note.svg';
+import { ReactComponent as NoteIcon } from '@/assets/icons/note.svg';
+import { ReactComponent as NoteSubmittedIcon } from '@/assets/icons/note-submitted.svg';
 import CallContacts from '@/components/CallContacts';
 import Duration from '@/components/Duration';
 import { pbx } from '@/services/pbx';
@@ -48,6 +49,14 @@ const EndedCall: FC<EndedCallProps> = ({ call }) => {
     );
   }
 
+  const renderLogIcon = () => {
+    if (saved) {
+      return <NoteSubmittedIcon className='h-5 w-5 fill-green-400' />;
+    }
+
+    return <NoteIcon className='h-5 w-5' title={logButtonTitle} />;
+  };
+
   return (
     <div className='bg-white p-1.5 flex justify-between'>
       <div>
@@ -64,11 +73,11 @@ const EndedCall: FC<EndedCallProps> = ({ call }) => {
       </div>
       <div className="flex items-center gap-2.5">
         <button className='h-6 w-6 p-1 rounded-full' onClick={() => pbx.call(call.partyNumber)} title='Dial'>
-          <PhoneIcon className='text-green-400 h-4 w-4' />
+          <PhoneIcon className='fill-green-400 h-4 w-4' />
         </button>
         {logEnabled && (
           <button onClick={() => logState.open(call)} title={logButtonTitle}>
-            <img className='h-6 w-6' src={NoteIcon} alt={logButtonTitle} />
+            {renderLogIcon()}
           </button>
         )}
       </div>

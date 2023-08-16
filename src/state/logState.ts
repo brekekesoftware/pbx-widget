@@ -2,6 +2,7 @@ import { authState } from '@/state/authState';
 import { callsState } from '@/state/callsState';
 import { Contact, Log } from '@/types/events';
 import { Call } from '@/types/phone';
+import { whenDev } from '@/utils/app';
 import { onLogSavedEvent } from '@/utils/events/listeners';
 import { fireLogEvent } from '@/utils/events/triggers';
 import { action, computed, makeObservable, observable } from 'mobx';
@@ -94,6 +95,8 @@ export class LogState {
     const log = this.getLog(this.current);
     log.duration = callsState.endedCallDuration(this.current);
     fireLogEvent(log);
+
+    whenDev(() => setTimeout(() => this.saveLog(log), 2000));
   }
 
   saveLog = (log: Log) => {

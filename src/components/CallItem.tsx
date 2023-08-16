@@ -2,7 +2,7 @@ import AttendedTransferIcon from '@/assets/icons/attended-transfer.svg';
 import BlindTransferIcon from '@/assets/icons/blind-transfer.svg';
 import MicOffIcon from '@/assets/icons/mic-off.svg';
 import MicIcon from '@/assets/icons/mic.svg';
-import NoteIcon from '@/assets/icons/note.svg';
+import { ReactComponent as NoteIcon } from '@/assets/icons/note.svg';
 import PauseIcon from '@/assets/icons/pause.svg';
 import PlayIcon from '@/assets/icons/play.svg';
 import CallContacts from '@/components/CallContacts';
@@ -234,7 +234,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
         </button>
         {logEnabled && (
           <button onClick={openLog} title={logButtonTitle}>
-            <img className="h-6 w-6" src={NoteIcon} alt={logButtonTitle} />
+            <NoteIcon className='h-5 w-5' title={logButtonTitle} />
           </button>
         )}
       </div>
