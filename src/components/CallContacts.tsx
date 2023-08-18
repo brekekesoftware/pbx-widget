@@ -46,7 +46,7 @@ const CallContacts: FC<Props> = ({ call, disabled, children }) => {
   return (
     <Menu>
       <Float
-        placement="bottom-end"
+        placement="bottom-start"
         flip
         offset={{ alignmentAxis: 10, mainAxis: 4 }}
         transform={false}
