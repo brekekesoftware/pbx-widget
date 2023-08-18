@@ -1,11 +1,8 @@
-import { callsActiveState } from "@/state/atoms/call";
-import { useRecoilValue } from "recoil";
+import { callsState } from '@/state/callsState';
 import { useObserver } from 'mobx-react';
-import CallItem from "./CallItem";
-import { callsState } from "@/state/callsState";
+import CallItem from './CallItem';
 
 const ActiveCalls = () => {
-  // const calls = useRecoilValue(callsActiveState);
   const calls = useObserver(() => callsState.activeCalls);
 
   return (
