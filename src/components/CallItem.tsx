@@ -184,7 +184,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
 
     return (
       <span className="text-xs whitespace-nowrap">
-        <Duration getDuration={call.getDuration} />
+        <Duration milliseconds={call.getDuration} />
         {!isTransferring && call.holding && <span className="ml-2 font-bold">On Hold</span>}
         {isTransferring && <span className="ml-2 font-bold">Transferring to {transferNumber}</span>}
         {call.muted && <span className="ml-2 font-bold">Muted</span>}
