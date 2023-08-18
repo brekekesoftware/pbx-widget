@@ -51,10 +51,10 @@ const EndedCall: FC<EndedCallProps> = ({ call }) => {
 
   const renderLogIcon = () => {
     if (saved) {
-      return <NoteSubmittedIcon className='h-5 w-5 fill-green-400' />;
+      return <NoteSubmittedIcon className='h-6 w-6 fill-green-400' />;
     }
 
-    return <NoteIcon className='h-5 w-5' title={logButtonTitle} />;
+    return <NoteIcon className='h-6 w-6' title={logButtonTitle} />;
   };
 
   return (

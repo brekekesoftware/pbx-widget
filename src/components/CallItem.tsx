@@ -238,7 +238,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
         </button>
         {logEnabled && (
           <button onClick={openLog} title={logButtonTitle}>
-            <NoteIcon className='h-5 w-5' title={logButtonTitle} />
+            <NoteIcon className='h-6 w-6' title={logButtonTitle} />
           </button>
         )}
       </div>
