@@ -26,3 +26,25 @@ export const onEvent = <TEventName extends GlobalEventNames>(name: TEventName, c
   document.addEventListener(type, listener);
   return () => document.removeEventListener(type, listener);
 };
+
+type GlobalEventListener<TEventName extends GlobalEventNames> = (callback: GlobalEventCallback<TEventName>) => VoidFunction;
+type GlobalEventDispatcher<TEventName extends GlobalEventNames> = (detail?: GlobalEventDetails<TEventName>) => boolean;
+
+const createDispatcher = <TEventName extends GlobalEventNames>(name: TEventName): GlobalEventDispatcher<TEventName> => {
+  return detail => fireEvent(name, detail);
+};
+
+const createListener = <TEventName extends GlobalEventNames>(name: TEventName): GlobalEventListener<TEventName> => {
+  return callback => onEvent(name, callback);
+};
+
+export { createListener, createDispatcher };
+
+// const dispatchCallRecordedEvent = createDispatcher('call-recorded');
+// const onCallRecordedEvent = createListener('call-recorded');
+
+// const dispatchCallInfoEvent = createDispatcher('call-info');
+// const dispatchLoggedOutEvent = createDispatcher('logged-out');
+
+// dispatchCallRecordedEvent({ recordingURL: '', roomId: '', recordingId: '' });
+// onCallRecordedEvent(event => void event.recordingURL);
