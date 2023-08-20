@@ -48,7 +48,7 @@ const SVGIcon: FC<Props> = ({ name, ...svgProps }) => {
 export default SVGIcon;
 
 type Icons =
-  'attended-transfer'
+  | 'attended-transfer'
   | 'blind-transfer'
   | 'keypad'
   | 'mic'

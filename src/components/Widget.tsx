@@ -18,10 +18,15 @@ const Widget = () => {
     }
 
     return <Main />;
-  }
+  };
 
   return (
-    <div className={c('relative flex flex-col bg-gray-100/75', {'h-screen': isProd()}, {'w-[400px] h-[500px] border rounded shadow m-2': isDev()})}>
+    <div
+      className={c(
+        'relative flex flex-col bg-gray-100/75',
+        { 'h-screen': isProd() },
+        { 'w-[400px] h-[500px] border rounded shadow m-2': isDev() },
+      )}>
       <div id="webphone_embed" style={{ display: 'none' }} />
       {renderView()}
     </div>

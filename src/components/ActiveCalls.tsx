@@ -7,7 +7,9 @@ const ActiveCalls = () => {
 
   return (
     <>
-      {calls.map(call => <CallItem key={call.id} call={call} />)}
+      {calls.map(call => (
+        <CallItem key={call.id} call={call} />
+      ))}
     </>
   );
 };

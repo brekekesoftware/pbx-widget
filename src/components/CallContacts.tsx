@@ -25,22 +25,24 @@ const CallContacts: FC<Props> = ({ call, disabled, children }) => {
   };
 
   const renderContacts = () => {
-    return contacts
-      .map(contact => (
-        <Menu.Item key={contact.id}>
-          {({ active }) => {
-            const s = selected?.id === contact.id;
-            return (
-              <button
-                className={c('font-medium flex flex-col w-full text-start rounded-md px-2 py-2 text-sm truncate transition-all', { 'bg-app text-white': active || s })}
-                onClick={e => clickContact(e, contact)}>
-                {contact.name}
-                {contact.type && <span className="text-xs font-normal">{contact.type}</span>}
-              </button>
-            );
-          }}
-        </Menu.Item>
-      ));
+    return contacts.map(contact => (
+      <Menu.Item key={contact.id}>
+        {({ active }) => {
+          const s = selected?.id === contact.id;
+          return (
+            <button
+              className={c(
+                'font-medium flex flex-col w-full text-start rounded-md px-2 py-2 text-sm truncate transition-all',
+                { 'bg-app text-white': active || s },
+              )}
+              onClick={e => clickContact(e, contact)}>
+              {contact.name}
+              {contact.type && <span className="text-xs font-normal">{contact.type}</span>}
+            </button>
+          );
+        }}
+      </Menu.Item>
+    ));
   };
 
   return (
@@ -58,10 +60,11 @@ const CallContacts: FC<Props> = ({ call, disabled, children }) => {
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-95"
         tailwindcssOriginClass>
-        <Menu.Button as={Fragment} disabled={disabled}>{children}</Menu.Button>
+        <Menu.Button as={Fragment} disabled={disabled}>
+          {children}
+        </Menu.Button>
 
-        <Menu.Items
-          className="px-1 py-1 w-56 space-y-1 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="p-1 w-56 space-y-1 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {renderContacts()}
         </Menu.Items>
       </Float>

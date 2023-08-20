@@ -21,7 +21,7 @@ export class PBX {
 
   call = (number: string) => {
     this.phone?.call(number);
-  }
+  };
 
   connect = async (auth: AuthData) => {
     logger('PBX.connect', auth);
@@ -38,12 +38,7 @@ export class PBX {
           password: auth.password,
         },
       ],
-      palEvents: [
-        'onClose',
-        'onError',
-        'notify_serverstatus',
-        'notify_status',
-      ],
+      palEvents: ['onClose', 'onError', 'notify_serverstatus', 'notify_status'],
       'webphone.pal.param.user': '*',
     });
 
@@ -84,7 +79,7 @@ export class PBX {
       }
     });
 
-    phone.on('pal', (pal) => {
+    phone.on('pal', pal => {
       const account = phone.getCurrentAccount();
       logger('phone.on(pal)', { account, pal });
       authState.login(account, () => {
@@ -114,22 +109,22 @@ export class PBX {
   private onCall = (call: Call) => {
     logger('phone.on.call', call);
     fireCallEvent(call);
-  }
+  };
 
   private onCallUpdated = (call: Call) => {
     logger('phone.on.call_updated', call);
     fireCallUpdatedEvent(call);
-  }
+  };
 
   private onCallEnded = (call: Call) => {
     logger('phone.on.call_end', call);
     fireCallEndedEvent(call);
-  }
+  };
 
   private removeListeners = () => {
     this.listeners.forEach(listener => listener());
     this.listeners = [];
-  }
+  };
 
   disconnect = () => {
     authState.logout();
@@ -141,15 +136,15 @@ export class PBX {
     this.pal = undefined;
     this.removeListeners();
     logger('pbx disconnected');
-  }
+  };
 
   private onError = (e: Error) => {
     logger('pbx error', e);
-  }
+  };
 
   getUsers = () => {
     if (!this.pal) {
-      return
+      return;
     }
 
     return this.pal.call_pal('getExtensions', {
@@ -158,8 +153,8 @@ export class PBX {
       limit: -1,
       type: 'user',
       property_names: ['name'],
-    })
-  }
+    });
+  };
 }
 
 export const pbx = new PBX();

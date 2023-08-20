@@ -53,11 +53,11 @@ export class LogState {
 
   open = (call: Call) => {
     this.current = call;
-  }
+  };
 
   close = () => {
     this.current = undefined;
-  }
+  };
 
   contactSelected = (call: Call, contact: Contact) => {
     if (this.callLogSaved(call)) return;
@@ -66,10 +66,10 @@ export class LogState {
     log.recordId = contact.id;
     log.recordType = contact.type;
     this.callsLog[call.id] = log;
-  }
+  };
 
   getLog = (call: Call) => {
-    return this.callsLog[call.id] ??= {
+    return (this.callsLog[call.id] ??= {
       call: call,
       duration: 0,
       subject: `Call on ${new Date(call.createdAt).toUTCString()}`,
@@ -79,16 +79,16 @@ export class LogState {
       recordId: callsState.callsContact[call.id]?.id ?? '',
       recordType: callsState.callsContact[call.id]?.type,
       tenant: authState.account?.pbxTenant ?? '',
-      user: authState.account!.pbxUsername
-    };
-  }
+      user: authState.account!.pbxUsername,
+    });
+  };
 
   updateLog = <K extends keyof Log>(key: K, value: Log[K]) => {
     if (this.current === undefined) return;
     const log = this.getLog(this.current);
     log[key] = value;
     this.callsLog[this.current.id] = log;
-  }
+  };
 
   submitLog = () => {
     if (this.current === undefined) return;
@@ -97,14 +97,14 @@ export class LogState {
     fireLogEvent(log);
 
     whenDev(() => setTimeout(() => this.saveLog(log), 2000));
-  }
+  };
 
   saveLog = (log: Log) => {
     this.savedLogs[log.call.id] = true;
     if (this.current && log.call.id === this.current.id) {
       this.close();
     }
-  }
+  };
 
   callLogSaved = (call: Call) => this.savedLogs[call.id] ?? false;
 
@@ -112,7 +112,7 @@ export class LogState {
     this.callsLog = {};
     this.savedLogs = {};
     this.current = undefined;
-  }
+  };
 }
 
 export const logState = new LogState();

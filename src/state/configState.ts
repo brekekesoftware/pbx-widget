@@ -36,7 +36,7 @@ export class ConfigState {
 
   config = (config: Config) => {
     this._config = config;
-  }
+  };
 }
 
 export const configState = new ConfigState();

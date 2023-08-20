@@ -23,12 +23,12 @@ export class AuthState {
     this.account = account;
     fireLoggedInEvent(account);
     callback();
-  }
+  };
 
   logout = () => {
     this.account = undefined;
     fireLoggedOutEvent();
-  }
+  };
 }
 
 export const authState = new AuthState();

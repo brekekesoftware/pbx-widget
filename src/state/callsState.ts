@@ -18,12 +18,11 @@ export class CallsState {
   contactsRecord: Record<string, Contact[] | undefined> = {};
 
   get calls() {
-    return Object.values(this.callsRecord)
-      .sort((a, b) => b.createdAt - a.createdAt);
+    return Object.values(this.callsRecord).sort((a, b) => b.createdAt - a.createdAt);
   }
 
   get activeCalls() {
-    return this.calls.filter((call) => this.callsEndedTime[call.id] === undefined);
+    return this.calls.filter(call => this.callsEndedTime[call.id] === undefined);
   }
 
   get inactiveCalls() {
@@ -61,11 +60,11 @@ export class CallsState {
         { id: '2', name: 'Jane Doe', type: 'lead' },
       ]);
     });
-  }
+  };
 
   endCall = (call: Call) => {
     this.callsEndedTime[call.id] = Date.now();
-  }
+  };
 
   callHasEnded = (call: Call) => this.callsEndedTime[call.id] !== undefined;
 
@@ -77,7 +76,7 @@ export class CallsState {
     const contact = this.callContact(call);
     if (contact === undefined) return undefined;
     return contact.name;
-  }
+  };
 
   updateCallContact = (call: Call, contact: Contact) => {
     if (this.callContact(call)?.id === contact.id) return;
@@ -86,13 +85,13 @@ export class CallsState {
     logState.contactSelected(call, contact);
     if (this.callHasEnded(call) || prev === undefined) return;
     fireContactSelectedEvent(call, contact);
-  }
+  };
 
   callInfo = (call: Call, info: CallInfo) => {
     if (this.callsContact[call.id] !== undefined) return;
     this.updateCallContact(call, Array.isArray(info) ? info[0] : info);
     if (Array.isArray(info)) this.contactsRecord[call.id] = info;
-  }
+  };
 
   callContacts = (call: Call) => this.contactsRecord[call.id] ?? [];
 
@@ -103,7 +102,7 @@ export class CallsState {
     this.callsEndedTime = {};
     this.callsContact = {};
     this.contactsRecord = {};
-  }
+  };
 }
 
 export const callsState = new CallsState();

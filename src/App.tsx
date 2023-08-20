@@ -9,4 +9,4 @@ function App() {
   return <Widget />;
 }
 
-export default App
+export default App;

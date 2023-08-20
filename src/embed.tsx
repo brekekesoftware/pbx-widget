@@ -40,7 +40,11 @@ export const embedWidgetRender = () => {
   };
 
   const initWidget = (el: HTMLElement) => {
-    ReactDOM.createRoot(el).render(<React.StrictMode><App /></React.StrictMode>);
+    ReactDOM.createRoot(el).render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+    );
   };
 
   window.Brekeke.renderWidget = (el, callback) => {
@@ -53,4 +57,3 @@ export const embedWidgetRender = () => {
     events: initCallback,
   };
 };
-

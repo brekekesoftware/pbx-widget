@@ -7,7 +7,9 @@ export const onMakeCallEvent = createListener('make-call');
 export const onCallEvent = createListener('call');
 export const onCallUpdatedEvent = createListener('call-updated');
 export const onCallEndedEvent = createListener('call-ended');
-export const onDuplicateContactCallAnsweredEvent = createListener('duplicate-contact-call-answered');
+export const onDuplicateContactCallAnsweredEvent = createListener(
+  'duplicate-contact-call-answered',
+);
 
 export const onLoggedInEvent = createListener('logged-in');
 export const onLoggedOutEvent = createListener('logged-out');

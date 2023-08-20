@@ -8,12 +8,18 @@ import { logger } from '@core/utils/logger';
 
 const prefix = 'brekeke';
 
-export const fireEvent = <TEventName extends GlobalEventNames>(name: TEventName, detail: GlobalEventDetails<TEventName> = {}) => {
+export const fireEvent = <TEventName extends GlobalEventNames>(
+  name: TEventName,
+  detail: GlobalEventDetails<TEventName> = {},
+) => {
   logger(`fired-${name}`, detail);
   return document.dispatchEvent(new CustomEvent<typeof detail>(`${prefix}:${name}`, { detail }));
 };
 
-export const onEvent = <TEventName extends GlobalEventNames>(name: TEventName, callback: GlobalEventCallback<TEventName>): VoidFunction => {
+export const onEvent = <TEventName extends GlobalEventNames>(
+  name: TEventName,
+  callback: GlobalEventCallback<TEventName>,
+): VoidFunction => {
   const listener = ((event: GlobalEvent<TEventName>) => {
     logger(`on-${name}`, event.detail);
     const response = callback(event.detail);
@@ -27,14 +33,22 @@ export const onEvent = <TEventName extends GlobalEventNames>(name: TEventName, c
   return () => document.removeEventListener(type, listener);
 };
 
-type GlobalEventListener<TEventName extends GlobalEventNames> = (callback: GlobalEventCallback<TEventName>) => VoidFunction;
-type GlobalEventDispatcher<TEventName extends GlobalEventNames> = (detail?: GlobalEventDetails<TEventName>) => boolean;
+type GlobalEventListener<TEventName extends GlobalEventNames> = (
+  callback: GlobalEventCallback<TEventName>,
+) => VoidFunction;
+type GlobalEventDispatcher<TEventName extends GlobalEventNames> = (
+  detail?: GlobalEventDetails<TEventName>,
+) => boolean;
 
-const createDispatcher = <TEventName extends GlobalEventNames>(name: TEventName): GlobalEventDispatcher<TEventName> => {
+const createDispatcher = <TEventName extends GlobalEventNames>(
+  name: TEventName,
+): GlobalEventDispatcher<TEventName> => {
   return detail => fireEvent(name, detail);
 };
 
-const createListener = <TEventName extends GlobalEventNames>(name: TEventName): GlobalEventListener<TEventName> => {
+const createListener = <TEventName extends GlobalEventNames>(
+  name: TEventName,
+): GlobalEventListener<TEventName> => {
   return callback => onEvent(name, callback);
 };
 

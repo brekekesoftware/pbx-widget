@@ -31,10 +31,14 @@ const CallItem: FC<Props> = observer(({ call }) => {
 
   const [showHelp, setShowHelp] = useState(true);
 
-  useEffect(() => onContactSelectedEvent(e => {
-    if (call.pbxRoomId !== e.call.pbxRoomId) return;
-    setShowHelp(false);
-  }), []);
+  useEffect(
+    () =>
+      onContactSelectedEvent(e => {
+        if (call.pbxRoomId !== e.call.pbxRoomId) return;
+        setShowHelp(false);
+      }),
+    [],
+  );
 
   const [holding, setHolding] = useState(call.holding);
   const [muted, setMuted] = useState(call.muted);
@@ -75,67 +79,67 @@ const CallItem: FC<Props> = observer(({ call }) => {
     return () => clearInterval(interval);
   }, [call]);
 
-  const toggleHold: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const toggleHold: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     call.toggleHoldWithCheck();
-  }
+  };
 
-  const toggleMuted: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const toggleMuted: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     call.toggleMuted();
-  }
+  };
 
-  const toggleRecording: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const toggleRecording: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     void call.toggleRecording();
   };
 
-  const openAttendedTransfer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const openAttendedTransfer: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     open();
-  }
+  };
 
-  const openBlindTransfer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const openBlindTransfer: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     open(true);
-  }
+  };
 
-  const openLog: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const openLog: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     logState.open(call);
-  }
+  };
 
-  const answer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const answer: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     call.answer();
     if (!hasMultipleContacts) return;
     fireDuplicateContactCallAnsweredEvent(call, selectedContact);
-  }
+  };
 
-  const disconnect: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const disconnect: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     void call.hangupWithUnhold();
-  }
+  };
 
-  const stopTransfer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const stopTransfer: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     void call.stopTransferring();
-  }
+  };
 
-  const connectTransfer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const connectTransfer: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     call.rawSession?.rtcSession.terminate();
-  }
+  };
 
-  const conferenceTransfer: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const conferenceTransfer: React.MouseEventHandler<HTMLButtonElement> = e => {
     e.stopPropagation();
     void call.conferenceTransferring();
-  }
+  };
 
-  const preventContactClickPropagation: React.MouseEventHandler = (e) => {
+  const preventContactClickPropagation: React.MouseEventHandler = e => {
     if (!hasMultipleContacts) return;
     e.stopPropagation();
-  }
+  };
 
   const renderAnswer = () => {
     if (!call.incoming || call.answered) return null;
@@ -162,13 +166,19 @@ const CallItem: FC<Props> = observer(({ call }) => {
 
     return (
       <>
-        <button className="bg-yellow-400 p-2 rounded-full" onClick={stopTransfer} title="Stop Transfer">
+        <button
+          className="bg-yellow-400 p-2 rounded-full"
+          onClick={stopTransfer}
+          title="Stop Transfer">
           <PhoneXMarkIcon className="text-white h-4 w-4" />
         </button>
         <button className="bg-red-400 p-2 rounded-full" onClick={connectTransfer} title="Transfer">
           <PhoneIcon className="text-white h-4 w-4" />
         </button>
-        <button className="bg-green-400 p-2 rounded-full" onClick={conferenceTransfer} title="Conference Transfer">
+        <button
+          className="bg-green-400 p-2 rounded-full"
+          onClick={conferenceTransfer}
+          title="Conference Transfer">
           <PhoneIcon className="text-white h-4 w-4" />
         </button>
       </>
@@ -176,11 +186,8 @@ const CallItem: FC<Props> = observer(({ call }) => {
   };
 
   const renderStatus = () => {
-    if (!call.answered) return (
-      <span className="text-xs">
-        {call.incoming ? 'Incoming...' : 'Calling...'}
-      </span>
-    );
+    if (!call.answered)
+      return <span className="text-xs">{call.incoming ? 'Incoming...' : 'Calling...'}</span>;
 
     return (
       <span className="text-xs whitespace-nowrap">
@@ -200,10 +207,18 @@ const CallItem: FC<Props> = observer(({ call }) => {
             {({ open }) => (
               <div
                 onClick={preventContactClickPropagation}
-                className={c('font-bold', { 'transition-all cursor-pointer rounded hover:bg-app/20 hover:p-1': hasMultipleContacts, 'rounded bg-app/20 p-1': open })}>
+                className={c('font-bold', {
+                  'transition-all cursor-pointer rounded hover:bg-app/20 hover:p-1':
+                    hasMultipleContacts,
+                  'rounded bg-app/20 p-1': open,
+                })}>
                 {displayName ?? call.getDisplayName()}
-                {displayName && <span className="ml-2 text-xs font-normal">({call.partyNumber})</span>}
-                {(hasMultipleContacts && showHelp) && <p className="text-[10px] font-normal">Click to select contact</p>}
+                {displayName && (
+                  <span className="ml-2 text-xs font-normal">({call.partyNumber})</span>
+                )}
+                {hasMultipleContacts && showHelp && (
+                  <p className="text-[10px] font-normal">Click to select contact</p>
+                )}
               </div>
             )}
           </CallContacts>
@@ -222,10 +237,18 @@ const CallItem: FC<Props> = observer(({ call }) => {
     return (
       <div className="flex gap-2 justify-around px-4 pb-1">
         <button onClick={toggleHold} title={holding ? 'unhold' : 'hold'}>
-          <img className="h-5 w-5" src={holding ? PlayIcon : PauseIcon} alt={holding ? 'unhold' : 'hold'} />
+          <img
+            className="h-5 w-5"
+            src={holding ? PlayIcon : PauseIcon}
+            alt={holding ? 'unhold' : 'hold'}
+          />
         </button>
         <button className="h-6 w-6" onClick={toggleMuted} title={muted ? 'unmute' : 'mute'}>
-          <img className="h-5 w-5" src={muted ? MicIcon : MicOffIcon} alt={muted ? 'unmute' : 'mute'} />
+          <img
+            className="h-5 w-5"
+            src={muted ? MicIcon : MicOffIcon}
+            alt={muted ? 'unmute' : 'mute'}
+          />
         </button>
         {/*<button onClick={toggleRecording}>*/}
         {/*  {recording ? 'stop recording' : 'record'}*/}
@@ -238,7 +261,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
         </button>
         {logEnabled && (
           <button onClick={openLog} title={logButtonTitle}>
-            <NoteIcon className='h-6 w-6' title={logButtonTitle} />
+            <NoteIcon className="h-6 w-6" title={logButtonTitle} />
           </button>
         )}
       </div>
@@ -247,7 +270,9 @@ const CallItem: FC<Props> = observer(({ call }) => {
 
   const renderMinimized = () => {
     return (
-      <div className="z-40 bg-white border-b p-2 gap-2 flex items-center justify-between" onClick={() => setIsMin(false)}>
+      <div
+        className="z-40 bg-white border-b p-2 gap-2 flex items-center justify-between"
+        onClick={() => setIsMin(false)}>
         <div className="flex gap-2 items-center overflow-hidden">
           <div className="font-bold whitespace-nowrap truncate">
             {displayName ?? call.getDisplayName()}
@@ -265,10 +290,12 @@ const CallItem: FC<Props> = observer(({ call }) => {
 
   return (
     <>
-      <div className="bg-white border-b" onClick={() => {
-        if (!call.answered) return;
-        setIsMin(true);
-      }}>
+      <div
+        className="bg-white border-b"
+        onClick={() => {
+          if (!call.answered) return;
+          setIsMin(true);
+        }}>
         {renderInfo()}
         {renderActionButtons()}
       </div>
