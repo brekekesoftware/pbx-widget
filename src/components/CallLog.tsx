@@ -21,7 +21,7 @@ const CallLog = () => {
       <p className="p-2 font-bold text-sm border-b sticky top-0 bg-gray-100">
         Calls ({calls.length})
       </p>
-      <div className="divide-y">
+      <div className="divide-y" key={calls.length}>
         {calls.map(call => (
           <EndedCall call={call} key={id(call)} />
         ))}
