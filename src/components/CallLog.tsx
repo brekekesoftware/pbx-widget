@@ -46,7 +46,7 @@ const EndedCall: FC<EndedCallProps> = ({ call }) => {
 
     return (
       <span className="ml-2">
-        <Duration milliseconds={callsState.endedCallDuration(call)} stop={true} />
+        <Duration milliseconds={callsState.endedCallDuration(call)} stop={true} key={call.id} />
       </span>
     );
   };
