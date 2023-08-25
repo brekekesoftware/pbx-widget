@@ -43,10 +43,11 @@ const EndedCall: FC<EndedCallProps> = ({ call }) => {
 
   const renderDuration = (call: Call) => {
     if (!call.answered) return null;
+    const duration = callsState.endedCallDuration(call);
 
     return (
       <span className="ml-2">
-        <Duration milliseconds={callsState.endedCallDuration(call)} stop={true} key={call.id} />
+        <Duration milliseconds={duration} stop={true} key={call.pbxRoomId} />
       </span>
     );
   };

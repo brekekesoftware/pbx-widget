@@ -8,7 +8,7 @@ const ActiveCalls = () => {
   return (
     <>
       {calls.map(call => (
-        <CallItem key={call.id} call={call} />
+        <CallItem key={call.pbxRoomId} call={call} />
       ))}
     </>
   );
