@@ -1,4 +1,5 @@
 import { callsState } from '@/state/callsState';
+import { id } from '@/utils/call';
 import { useObserver } from 'mobx-react';
 import CallItem from './CallItem';
 
@@ -8,7 +9,7 @@ const ActiveCalls = () => {
   return (
     <>
       {calls.map(call => (
-        <CallItem key={call.pbxRoomId} call={call} />
+        <CallItem key={id(call)} call={call} />
       ))}
     </>
   );

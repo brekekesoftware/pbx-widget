@@ -3,6 +3,7 @@ import { callsState } from '@/state/callsState';
 import { Contact, Log } from '@/types/events';
 import { Call } from '@/types/phone';
 import { whenDev } from '@/utils/app';
+import { id } from '@/utils/call';
 import { onLogSavedEvent } from '@/utils/events/listeners';
 import { fireLogEvent } from '@/utils/events/triggers';
 import { action, computed, makeObservable, observable } from 'mobx';
@@ -21,12 +22,12 @@ export class LogState {
   }
 
   get submitted() {
-    return this.current && this.savedLogs[this.current.pbxRoomId];
+    return this.current && this.savedLogs[id(this.current)];
   }
 
   get canSubmit() {
     if (this.current === undefined) return false;
-    return !this.savedLogs[this.current.pbxRoomId] && callsState.callHasEnded(this.current);
+    return !this.savedLogs[id(this.current)] && callsState.callHasEnded(this.current);
   }
 
   constructor() {
@@ -61,23 +62,23 @@ export class LogState {
 
   contactSelected = (call: Call, contact: Contact) => {
     if (this.callLogSaved(call)) return;
-    const log = this.callsLog[call.pbxRoomId];
+    const log = this.callsLog[id(call)];
     if (log === undefined) return;
     log.recordId = contact.id;
     log.recordType = contact.type;
-    this.callsLog[call.pbxRoomId] = log;
+    this.callsLog[id(call)] = log;
   };
 
   getLog = (call: Call) => {
-    return (this.callsLog[call.pbxRoomId] ??= {
+    return (this.callsLog[id(call)] ??= {
       call: call,
       duration: 0,
       subject: `Call on ${new Date(call.createdAt).toUTCString()}`,
       comment: '',
       description: '',
       result: '',
-      recordId: callsState.callsContact[call.pbxRoomId]?.id ?? '',
-      recordType: callsState.callsContact[call.pbxRoomId]?.type,
+      recordId: callsState.callsContact[id(call)]?.id ?? '',
+      recordType: callsState.callsContact[id(call)]?.type,
       tenant: authState.account?.pbxTenant ?? '',
       user: authState.account!.pbxUsername,
     });
@@ -87,7 +88,7 @@ export class LogState {
     if (this.current === undefined) return;
     const log = this.getLog(this.current);
     log[key] = value;
-    this.callsLog[this.current.pbxRoomId] = log;
+    this.callsLog[id(this.current)] = log;
   };
 
   submitLog = () => {
@@ -100,13 +101,13 @@ export class LogState {
   };
 
   saveLog = (log: Log) => {
-    this.savedLogs[log.call.pbxRoomId] = true;
-    if (this.current && log.call.pbxRoomId === this.current.pbxRoomId) {
+    this.savedLogs[id(log.call)] = true;
+    if (this.current && id(log.call) === id(this.current)) {
       this.close();
     }
   };
 
-  callLogSaved = (call: Call) => this.savedLogs[call.pbxRoomId] ?? false;
+  callLogSaved = (call: Call) => this.savedLogs[id(call)] ?? false;
 
   reset = () => {
     this.callsLog = {};

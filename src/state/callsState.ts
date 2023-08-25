@@ -2,6 +2,7 @@ import { logState } from '@/state/logState';
 import { CallInfo, Contact } from '@/types/events';
 import { Call } from '@/types/phone';
 import { whenDev } from '@/utils/app';
+import { id } from '@/utils/call';
 import {
   onCallEndedEvent,
   onCallEvent,
@@ -22,7 +23,7 @@ export class CallsState {
   }
 
   get activeCalls() {
-    return this.calls.filter(call => this.callsEndedTime[call.pbxRoomId] === undefined);
+    return this.calls.filter(call => this.callsEndedTime[id(call)] === undefined);
   }
 
   get inactiveCalls() {
@@ -53,7 +54,7 @@ export class CallsState {
 
   addCall = (call: Call) => {
     if (!call.pbxRoomId) return;
-    this.callsRecord[call.pbxRoomId] = call;
+    this.callsRecord[id(call)] = call;
 
     whenDev(() => {
       this.callInfo(call, [
@@ -65,14 +66,14 @@ export class CallsState {
 
   endCall = (call: Call) => {
     if (!call.pbxRoomId) return;
-    this.callsEndedTime[call.pbxRoomId] = Date.now();
+    this.callsEndedTime[id(call)] = Date.now();
   };
 
-  callHasEnded = (call: Call) => this.callsEndedTime[call.pbxRoomId] !== undefined;
+  callHasEnded = (call: Call) => this.callsEndedTime[id(call)] !== undefined;
 
-  endedCallDuration = (call: Call) => this.callsEndedTime[call.pbxRoomId]! - call.answeredAt;
+  endedCallDuration = (call: Call) => this.callsEndedTime[id(call)]! - call.answeredAt;
 
-  callContact = (call: Call) => this.callsContact[call.pbxRoomId];
+  callContact = (call: Call) => this.callsContact[id(call)];
 
   displayName = (call: Call) => {
     const contact = this.callContact(call);
@@ -83,19 +84,19 @@ export class CallsState {
   updateCallContact = (call: Call, contact: Contact) => {
     if (this.callContact(call)?.id === contact.id) return;
     const prev = this.callContact(call);
-    this.callsContact[call.pbxRoomId] = contact;
+    this.callsContact[id(call)] = contact;
     logState.contactSelected(call, contact);
     if (this.callHasEnded(call) || prev === undefined) return;
     fireContactSelectedEvent(call, contact);
   };
 
   callInfo = (call: Call, info: CallInfo) => {
-    if (this.callsContact[call.pbxRoomId] !== undefined) return;
+    if (this.callsContact[id(call)] !== undefined) return;
     this.updateCallContact(call, Array.isArray(info) ? info[0] : info);
-    if (Array.isArray(info)) this.contactsRecord[call.pbxRoomId] = info;
+    if (Array.isArray(info)) this.contactsRecord[id(call)] = info;
   };
 
-  callContacts = (call: Call) => this.contactsRecord[call.pbxRoomId] ?? [];
+  callContacts = (call: Call) => this.contactsRecord[id(call)] ?? [];
 
   callHasMultipleContacts = (call: Call) => this.callContacts(call).length > 1;
 

@@ -7,6 +7,7 @@ import { callsState } from '@/state/callsState';
 import { configState } from '@/state/configState';
 import { logState } from '@/state/logState';
 import { Call } from '@/types/phone';
+import { id } from '@/utils/call';
 import { c } from '@/utils/html-class';
 import { PhoneIcon } from '@heroicons/react/24/solid';
 import { useObserver } from 'mobx-react';
@@ -22,7 +23,7 @@ const CallLog = () => {
       </p>
       <div className="divide-y">
         {calls.map(call => (
-          <EndedCall call={call} key={call.pbxRoomId} />
+          <EndedCall call={call} key={id(call)} />
         ))}
       </div>
     </div>
@@ -47,7 +48,7 @@ const EndedCall: FC<EndedCallProps> = ({ call }) => {
 
     return (
       <span className="ml-2">
-        <Duration milliseconds={duration} stop={true} key={call.pbxRoomId} />
+        <Duration milliseconds={duration} stop={true} key={id(call)} />
       </span>
     );
   };
