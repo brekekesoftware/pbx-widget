@@ -145,8 +145,8 @@ const CallItem: FC<Props> = observer(({ call }) => {
     if (!call.incoming || call.answered) return null;
 
     return (
-      <button className="bg-green-400 p-2 rounded-full" onClick={answer} title="Answer">
-        <PhoneIcon className="text-white h-4 w-4" />
+      <button className="rounded-full bg-green-400 p-2" onClick={answer} title="Answer">
+        <PhoneIcon className="h-4 w-4 text-white" />
       </button>
     );
   };
@@ -155,8 +155,8 @@ const CallItem: FC<Props> = observer(({ call }) => {
     if (isTransferring || holding) return null;
 
     return (
-      <button className="bg-red-400 p-2 rounded-full" onClick={disconnect} title="Disconnect">
-        <PhoneXMarkIcon className="text-white h-4 w-4" />
+      <button className="rounded-full bg-red-400 p-2" onClick={disconnect} title="Disconnect">
+        <PhoneXMarkIcon className="h-4 w-4 text-white" />
       </button>
     );
   };
@@ -167,19 +167,19 @@ const CallItem: FC<Props> = observer(({ call }) => {
     return (
       <>
         <button
-          className="bg-yellow-400 p-2 rounded-full"
+          className="rounded-full bg-yellow-400 p-2"
           onClick={stopTransfer}
           title="Stop Transfer">
-          <PhoneXMarkIcon className="text-white h-4 w-4" />
+          <PhoneXMarkIcon className="h-4 w-4 text-white" />
         </button>
-        <button className="bg-red-400 p-2 rounded-full" onClick={connectTransfer} title="Transfer">
-          <PhoneIcon className="text-white h-4 w-4" />
+        <button className="rounded-full bg-red-400 p-2" onClick={connectTransfer} title="Transfer">
+          <PhoneIcon className="h-4 w-4 text-white" />
         </button>
         <button
-          className="bg-green-400 p-2 rounded-full"
+          className="rounded-full bg-green-400 p-2"
           onClick={conferenceTransfer}
           title="Conference Transfer">
-          <PhoneIcon className="text-white h-4 w-4" />
+          <PhoneIcon className="h-4 w-4 text-white" />
         </button>
       </>
     );
@@ -190,7 +190,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
       return <span className="text-xs">{call.incoming ? 'Incoming...' : 'Calling...'}</span>;
 
     return (
-      <span className="text-xs whitespace-nowrap">
+      <span className="whitespace-nowrap text-xs">
         <Duration milliseconds={call.getDuration} />
         {!isTransferring && call.holding && <span className="ml-2 font-bold">On Hold</span>}
         {isTransferring && <span className="ml-2 font-bold">Transferring to {transferNumber}</span>}
@@ -201,14 +201,14 @@ const CallItem: FC<Props> = observer(({ call }) => {
 
   const renderInfo = () => {
     return (
-      <div className="flex gap-2 p-2 items-center">
+      <div className="flex items-center gap-2 p-2">
         <div className="grow">
           <CallContacts call={call} disabled={!hasMultipleContacts}>
             {({ open }) => (
               <div
                 onClick={preventContactClickPropagation}
                 className={c('font-bold', {
-                  'transition-all cursor-pointer rounded hover:bg-app/20 hover:p-1':
+                  'cursor-pointer rounded transition-all hover:bg-app/20 hover:p-1':
                     hasMultipleContacts,
                   'rounded bg-app/20 p-1': open,
                 })}>
@@ -235,7 +235,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
     if (!call.answered) return null;
 
     return (
-      <div className="flex gap-2 justify-around px-4 pb-1">
+      <div className="flex justify-around gap-2 px-4 pb-1">
         <button onClick={toggleHold} title={holding ? 'unhold' : 'hold'}>
           <img
             className="h-5 w-5"
@@ -271,10 +271,10 @@ const CallItem: FC<Props> = observer(({ call }) => {
   const renderMinimized = () => {
     return (
       <div
-        className="z-40 bg-white border-b p-2 gap-2 flex items-center justify-between"
+        className="z-40 flex items-center justify-between gap-2 border-b bg-white p-2"
         onClick={() => setIsMin(false)}>
-        <div className="flex gap-2 items-center overflow-hidden">
-          <div className="font-bold whitespace-nowrap truncate">
+        <div className="flex items-center gap-2 overflow-hidden">
+          <div className="truncate whitespace-nowrap font-bold">
             {displayName ?? call.getDisplayName()}
           </div>
           {renderStatus()}
@@ -291,7 +291,7 @@ const CallItem: FC<Props> = observer(({ call }) => {
   return (
     <>
       <div
-        className="bg-white border-b"
+        className="border-b bg-white"
         onClick={() => {
           if (!call.answered) return;
           setIsMin(true);

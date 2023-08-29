@@ -81,26 +81,26 @@ const Keypad: FC<Props> = ({ number, onNumberChange, title, onKeyInput, show, cl
           leave="ease-in duration-200"
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95">
-          <div className="bg-white absolute z-50 inset-x-0 bottom-0 p-2 rounded-sm">
+          <div className="absolute inset-x-0 bottom-0 z-50 rounded-sm bg-white p-2">
             {title && (
-              <div className="text-center text-sm uppercase tracking-wide ml-1">{title}</div>
+              <div className="ml-1 text-center text-sm uppercase tracking-wide">{title}</div>
             )}
             <input
               disabled
               value={value}
-              className="w-full disabled:bg-transparent border text-xl text-center rounded font-bold tracking-widest px-2 py-1"
+              className="w-full rounded border px-2 py-1 text-center text-xl font-bold tracking-widest disabled:bg-transparent"
             />
-            <div className="w-full mt-2 text-xl grid grid-cols-3 gap-1">
+            <div className="mt-2 grid w-full grid-cols-3 gap-1 text-xl">
               {keyRows.map(renderRow)}
               <div className="col-start-2 flex items-center justify-center">
                 <button
-                  className="h-12 w-12 rounded-full bg-app font-bold flex items-center justify-center"
+                  className="flex h-12 w-12 items-center justify-center rounded-full bg-app font-bold"
                   onClick={() => {
                     if (value.trim().length === 0) return;
                     close();
                     call(value);
                   }}>
-                  <PhoneIcon className="text-white h-6 w-6" />
+                  <PhoneIcon className="h-6 w-6 text-white" />
                 </button>
               </div>
               {value !== '' && (

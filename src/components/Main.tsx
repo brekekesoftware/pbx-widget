@@ -37,15 +37,15 @@ const Main = () => {
 
   return (
     <>
-      <div className="bg-white h-10 flex items-center p-2.5 border-b justify-between z-50">
+      <div className="z-50 flex h-10 items-center justify-between border-b bg-white p-2.5">
         <img className="h-5" src={Logo} alt="" />
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <div className="flex items-center rounded-full bg-gray-200 p-0.5 pl-2">
-            <span className="font-bold text-sm">{account!.pbxUsername}</span>
+            <span className="text-sm font-bold">{account!.pbxUsername}</span>
             <img className="h-6 w-6" src={user} alt="user" />
           </div>
           <button
-            className="border border-transparent hover:border-gray-300 rounded-full"
+            className="rounded-full border border-transparent hover:border-gray-300"
             onClick={pbx.disconnect}>
             <img className="h-6 w-6" src={logout} alt="logout" title="logout" />
           </button>
@@ -54,12 +54,12 @@ const Main = () => {
       <ActiveCalls />
       <CallLog />
       <form
-        className="flex gap-2 py-1 p-2 items-center border-t absolute bottom-0 inset-x-0"
+        className="absolute inset-x-0 bottom-0 flex items-center gap-2 border-t p-2 py-1"
         onSubmit={submit}>
         <input
           value={value}
           onChange={event => setValue(event.target.value)}
-          className="w-full rounded border h-8 font-bold px-2"
+          className="h-8 w-full rounded border px-2 font-bold"
         />
         <button onClick={open} type="button">
           <img className="h-10 w-10" src={KeypadIcon} alt="keypad" />

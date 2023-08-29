@@ -32,7 +32,7 @@ const CallContacts: FC<Props> = ({ call, disabled, children }) => {
           return (
             <button
               className={c(
-                'font-medium flex flex-col w-full text-start rounded-md px-2 py-2 text-sm truncate transition-all',
+                'flex w-full flex-col truncate rounded-md px-2 py-2 text-start text-sm font-medium transition-all',
                 { 'bg-app text-white': active || s },
               )}
               onClick={e => clickContact(e, contact)}>
@@ -64,7 +64,7 @@ const CallContacts: FC<Props> = ({ call, disabled, children }) => {
           {children}
         </Menu.Button>
 
-        <Menu.Items className="p-1 w-56 space-y-1 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="w-56 space-y-1 rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {renderContacts()}
         </Menu.Items>
       </Float>

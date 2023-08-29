@@ -8,7 +8,7 @@ interface Props {
 const Button: FC<Props> = ({ value, onClick }) => {
   return (
     <button
-      className="rounded flex items-center justify-center h-12 font-bold text-black border shadow-sm active:shadow-none"
+      className="flex h-12 items-center justify-center rounded border font-bold text-black shadow-sm active:shadow-none"
       onClick={onClick}>
       {value}
     </button>

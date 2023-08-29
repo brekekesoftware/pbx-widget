@@ -54,14 +54,14 @@ const Log = () => {
           leave="ease-in duration-200"
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95">
-          <div className="bg-white shadow absolute z-50 inset-x-0 bottom-0 p-2 rounded-sm">
+          <div className="absolute inset-x-0 bottom-0 z-50 rounded-sm bg-white p-2 shadow">
             <form onSubmit={submit} className="space-y-2 p-2 pb-6">
               <input
                 type="text"
                 value={log?.subject}
                 disabled={submitted}
                 placeholder="Subject"
-                className="disabled:bg-gray-100 w-full rounded border border-gray-300 p-2 py-1"
+                className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
                 onChange={event => updateLog('subject', event.target.value)}
               />
               {descriptionEnabled && (
@@ -70,12 +70,12 @@ const Log = () => {
                   value={log?.description}
                   disabled={submitted}
                   placeholder="Description"
-                  className="disabled:bg-gray-100 w-full rounded border border-gray-300 p-2 py-1"
+                  className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
                   onChange={event => updateLog('description', event.target.value)}
                 />
               )}
               <textarea
-                className="disabled:bg-gray-100 w-full rounded border border-gray-300 p-2 py-1"
+                className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
                 placeholder="Comment"
                 disabled={submitted}
                 onChange={event => updateLog('comment', event.target.value)}
@@ -87,14 +87,14 @@ const Log = () => {
                   value={log?.result}
                   disabled={submitted}
                   placeholder="Result"
-                  className="disabled:bg-gray-100 w-full rounded border border-gray-300 p-2 py-1"
+                  className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
                   onChange={event => updateLog('result', event.target.value)}
                 />
               )}
               <button
                 disabled={disableSubmit}
                 type="submit"
-                className="bg-app disabled:bg-gray-200 disabled:text-black py-1 rounded font-bold uppercase text-white w-full">
+                className="w-full rounded bg-app py-1 font-bold uppercase text-white disabled:bg-gray-200 disabled:text-black">
                 Submit
               </button>
             </form>

@@ -20,7 +20,7 @@ const Auth = () => {
 
   return (
     <>
-      <div className="bg-white h-10 flex items-center p-2.5 border-b">
+      <div className="flex h-10 items-center border-b bg-white p-2.5">
         <img className="h-5" src={Logo} alt="" />
       </div>
       <form onSubmit={login} className="space-y-2 p-2 pb-6">
@@ -61,11 +61,11 @@ const Auth = () => {
           placeholder="Port"
           onChange={event => updateData('port', event.target.value)}
         />
-        <label className="flex gap-2 items-center">
+        <label className="flex items-center gap-2">
           <input type="checkbox" checked={shouldSave} onChange={() => setShouldSave(s => !s)} />
           Remember me
         </label>
-        <button type="submit" className="bg-app py-1 rounded font-bold uppercase text-white w-full">
+        <button type="submit" className="w-full rounded bg-app py-1 font-bold uppercase text-white">
           Login
         </button>
       </form>
