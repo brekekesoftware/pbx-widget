@@ -16,6 +16,7 @@ import {
   fireConfigEvent,
   fireLogSavedEvent,
   fireMakeCallEvent,
+  fireNotification,
 } from '@/utils/events/triggers';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -27,6 +28,7 @@ export const embedWidgetRender = () => {
       fireConfigEvent,
       fireLogSavedEvent,
       fireMakeCallEvent,
+      fireNotification,
       onCallEvent,
       onCallEndedEvent,
       onCallRecordedEvent,

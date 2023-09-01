@@ -34,3 +34,6 @@ export const fireCallRecordedEvent: GlobalEventTrigger<'call-recorded'> = e =>
 
 export const fireContactSelectedEvent: GlobalEventTrigger<'contact-selected'> = (call, contact) =>
   fireEvent('contact-selected', { call, contact });
+
+export const fireNotification: GlobalEventTrigger<'notification'> = notification =>
+  fireEvent('notification', notification);

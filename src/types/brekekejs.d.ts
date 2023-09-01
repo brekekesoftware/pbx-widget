@@ -14,6 +14,7 @@ import {
   fireConfigEvent,
   fireLogSavedEvent,
   fireMakeCallEvent,
+  fireNotification,
 } from '@core/utils/events/triggers';
 
 declare global {
@@ -38,6 +39,7 @@ type WidgetCallbackParams = {
   fireConfigEvent: typeof fireConfigEvent;
   fireLogSavedEvent: typeof fireLogSavedEvent;
   fireMakeCallEvent: typeof fireMakeCallEvent;
+  fireNotification: typeof fireNotification;
 };
 
 type WidgetCallback = (params: WidgetCallbackParams) => void;

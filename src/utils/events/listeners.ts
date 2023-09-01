@@ -24,3 +24,4 @@ export const onConfigEvent = createListener('config');
 export const onCallRecordedEvent = createListener('call-recorded');
 
 export const onContactSelectedEvent = createListener('contact-selected');
+export const onNotification = createListener('notification');

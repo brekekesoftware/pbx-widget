@@ -1,5 +1,6 @@
 import Auth from '@/components/Auth';
 import Main from '@/components/Main';
+import Notifications from '@/components/Notifications';
 import { authState } from '@/state/authState';
 import { isDev, isProd } from '@/utils/app';
 import { c } from '@/utils/html-class';
@@ -27,6 +28,7 @@ const Widget = () => {
         { 'h-screen': isProd() },
         { 'm-2 h-[500px] w-[400px] rounded border shadow': isDev() },
       )}>
+      <Notifications />
       <div id="webphone_embed" style={{ display: 'none' }} />
       {renderView()}
     </div>

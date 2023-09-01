@@ -1,3 +1,4 @@
+import { Notification } from '@/components/Notifications';
 import { Account, Call } from '@core/types/phone';
 
 type GlobalEventsMap = {
@@ -79,6 +80,11 @@ type GlobalEventsMap = {
     parameters: [data: CallRecord];
     details: CallRecord;
     result: boolean | void;
+  };
+  notification: {
+    parameters: [notification: string | Omit<Notification, 'id'>];
+    details: string | Omit<Notification, 'id'>;
+    result: void;
   };
 };
 
