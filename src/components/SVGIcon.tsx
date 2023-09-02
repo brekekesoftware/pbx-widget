@@ -63,5 +63,4 @@ type Icons =
   | 'note'
   | 'note-submitted'
   | 'pause'
-  | 'play'
-  | 'user';
+  | 'play';
