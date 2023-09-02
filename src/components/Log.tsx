@@ -15,6 +15,7 @@ const Log = () => {
   const resultEnabled = useObserver(() => configState.logResultEnabled);
 
   const [log, setLog] = useState(() => currentLog ?? ({} as Log));
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     setLog(currentLog ?? ({} as Log));
@@ -25,10 +26,20 @@ const Log = () => {
       logState.updateLog(key, value);
       return { ...prevState, [key]: value };
     });
+
+    if (showError && key === 'subject' && value) {
+      setShowError(false);
+    }
   };
 
   const submit: FormEventHandler = e => {
     e.preventDefault();
+
+    if (!log.subject) {
+      setShowError(true);
+      return;
+    }
+
     logState.submitLog();
   };
 
@@ -64,6 +75,11 @@ const Log = () => {
                 className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
                 onChange={event => updateLog('subject', event.target.value)}
               />
+              {showError && (
+                <span className="!-mt-1.5 inline-block text-sm text-red-400">
+                  Subject cannot be empty
+                </span>
+              )}
               {descriptionEnabled && (
                 <input
                   type="text"
