@@ -1,5 +1,5 @@
 import { logger } from '@/utils/logger';
-import { FC, SVGProps, useEffect, useRef, useState } from 'react';
+import { FC, SVGProps, useCallback, useEffect, useRef, useState } from 'react';
 
 type SVGComponent = FC<SVGProps<SVGSVGElement>>;
 
@@ -10,26 +10,33 @@ export interface SVGIconOptions {
 
 export const useSVGIcon = (name: Icons, options: SVGIconOptions = {}) => {
   const iconRef = useRef<SVGComponent>();
+  const optionsRef = useRef<SVGIconOptions>(options);
   const [error, setError] = useState<Error>();
   const [loading, setLoading] = useState(false);
 
-  const loadIcon = async () => {
+  useEffect(() => void (optionsRef.current = options), [options]);
+
+  const loadIcon = useCallback(async () => {
     setLoading(true);
+    const { onCompleted, onError } = optionsRef.current;
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const module = await import(`@/assets/icons/${name}.svg`);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
       iconRef.current = module.ReactComponent;
-      options.onCompleted?.(name, iconRef.current);
+      setError(undefined);
+      onCompleted?.(name, iconRef.current);
       logger('SVGIcon', `Loaded icon: ${name}`, module);
     } catch (error) {
       setError(error as Error);
-      options.onError?.(error as Error);
+      onError?.(error as Error);
       logger('SVGIcon', `Failed to load icon: ${name}`, error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [name]);
 
-  useEffect(() => void loadIcon(), [name]);
+  useEffect(() => void loadIcon(), [loadIcon]);
 
   return { error, loading, Icon: iconRef.current };
 };
