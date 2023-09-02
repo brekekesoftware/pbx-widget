@@ -86,9 +86,11 @@ const getSavedData = (): AuthData => {
     return JSON.parse(saved) as AuthData;
   }
 
+  const url = new URL(location.href);
+
   return {
-    host: '',
-    port: '',
+    host: url.hostname,
+    port: url.port,
     tenant: '',
     user: '',
     password: '',
