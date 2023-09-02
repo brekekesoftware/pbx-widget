@@ -1,18 +1,16 @@
+import KeypadIcon from '@/assets/icons/keypad.svg';
+import logout from '@/assets/icons/logout.png';
+import user from '@/assets/icons/user.png';
 import Logo from '@/assets/images/logo.png';
 import CallLog from '@/components/CallLog';
 import Log from '@/components/Log';
 import { pbx } from '@/services/pbx';
 import { authState } from '@/state/authState';
 import { onNumberEntry } from '@/utils/events/listeners';
-import { fireMakeCallEvent, fireNumberEntryEvent } from '@/utils/events/triggers';
 import { useObserver } from 'mobx-react';
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import ActiveCalls from './ActiveCalls';
-import { callsState } from '@/state/callsState';
 import Keypad from './Keypad';
-import KeypadIcon from '@/assets/icons/keypad.svg';
-import logout from '@/assets/icons/logout.png';
-import user from '@/assets/icons/user.png';
 
 const Main = () => {
   const [value, setValue] = useState('');
