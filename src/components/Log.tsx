@@ -19,6 +19,7 @@ const Log = () => {
 
   useEffect(() => {
     setLog(currentLog ?? ({} as Log));
+    setShowError(false);
   }, [currentLog]);
 
   const updateLog = <K extends keyof Log>(key: K, value: Log[K]) => {
