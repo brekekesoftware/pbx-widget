@@ -1,21 +1,10 @@
+import { Notification, Type } from '@/types/notification';
 import { onNotification } from '@/utils/events/listeners';
 import { c } from '@/utils/html-class';
 import { Transition } from '@headlessui/react';
-import { FC, Fragment, useEffect, useState } from 'react';
+import { FC, Fragment, useEffect, useMemo, useState } from 'react';
 
 const timeouts: Record<number | string, NodeJS.Timeout> = {};
-
-enum Type {
-  success = 'success',
-  error = 'error',
-  default = 'default',
-}
-
-export interface Notification {
-  id: number;
-  message: string;
-  type: Type | keyof typeof Type;
-}
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState<Record<number, Notification>>({});
@@ -57,17 +46,19 @@ const Notifications = () => {
     };
   }, []);
 
+  const notificationsX = useMemo(() => Object.values(notifications).sort(), [notifications]);
+
+  if (notificationsX.length == 0) return null;
+
   return (
     <div className="absolute right-4 top-12 z-50 ml-4 flex flex-col items-end space-y-2">
-      {Object.values(notifications)
-        .sort()
-        .map(notification => (
-          <Notification
-            key={notification.id}
-            notification={notification}
-            onRemove={() => remove(notification.id)}
-          />
-        ))}
+      {notificationsX.map(notification => (
+        <Notification
+          key={notification.id}
+          notification={notification}
+          onRemove={() => remove(notification.id)}
+        />
+      ))}
     </div>
   );
 };

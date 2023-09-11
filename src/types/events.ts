@@ -1,5 +1,5 @@
-import { Notification } from '@/components/Notifications';
 import { Account, Call } from '@core/types/phone';
+import { Notification } from './notification';
 
 type GlobalEventsMap = {
   'logged-in': {
