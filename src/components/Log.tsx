@@ -92,7 +92,7 @@ const Log = () => {
                 />
               )}
               <textarea
-                className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
+                className="block w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
                 placeholder="Comment"
                 disabled={submitted}
                 onChange={event => updateLog('comment', event.target.value)}
