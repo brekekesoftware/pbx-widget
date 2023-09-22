@@ -96,11 +96,25 @@ export interface Contact {
 
 export type CallInfo = Contact | Contact[];
 
+interface LogInput {
+  name: string;
+  label?: string;
+  type: 'text' | 'textarea' | 'select';
+  required?: boolean;
+  defaultValue?: string | number;
+}
+
+export interface SelectLogInput extends LogInput {
+  type: 'select';
+  options: { label: string; value: string | number }[];
+}
+
 export interface Config {
   enableLog?: boolean;
   enableLogDescription?: boolean;
   enableLogResult?: boolean;
   logButtonTitle?: string;
+  logInputs?: Array<LogInput | SelectLogInput>;
 }
 
 export type Log = {
@@ -115,6 +129,7 @@ export type Log = {
   relatedRecordId?: string;
   tenant: string;
   user: string;
+  inputs: Record<string, string | number>;
 };
 
 export interface CallRecord {

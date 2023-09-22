@@ -1,11 +1,13 @@
 import { authState } from '@/state/authState';
 import { callsState } from '@/state/callsState';
-import { Contact, Log } from '@/types/events';
+import { configState } from '@/state/configState';
+import { CallRecord, Contact, Log } from '@/types/events';
 import { Call } from '@/types/phone';
 import { whenDev } from '@/utils/app';
 import { id } from '@/utils/call';
-import { onLogSavedEvent } from '@/utils/events/listeners';
+import { onCallRecordedEvent, onLogSavedEvent } from '@/utils/events/listeners';
 import { fireLogEvent } from '@/utils/events/triggers';
+import { logger } from '@/utils/logger';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 export class LogState {
@@ -30,6 +32,8 @@ export class LogState {
     return !this.savedLogs[id(this.current)] && callsState.callHasEnded(this.current);
   }
 
+  customInputValues?: Log['inputs'];
+
   constructor() {
     makeObservable(this, {
       callsLog: observable,
@@ -51,6 +55,16 @@ export class LogState {
 
     onLogSavedEvent(this.saveLog);
   }
+
+  defaultCustomInputValues = () => {
+    return (this.customInputValues ??= configState.logInputs.reduce(
+      (object, { name, defaultValue }) => {
+        object[name] = defaultValue ?? '';
+        return object;
+      },
+      {} as Log['inputs'],
+    ));
+  };
 
   open = (call: Call) => {
     this.current = call;
@@ -81,6 +95,7 @@ export class LogState {
       recordType: callsState.callsContact[id(call)]?.type,
       tenant: authState.account?.pbxTenant ?? '',
       user: authState.account!.pbxUsername,
+      inputs: this.defaultCustomInputValues(),
     });
   };
 

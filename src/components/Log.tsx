@@ -1,9 +1,9 @@
 import { configState } from '@/state/configState';
 import { logState } from '@/state/logState';
-import { Log } from '@/types/events';
+import { Log, SelectLogInput } from '@/types/events';
 import { Transition } from '@headlessui/react';
 import { useObserver } from 'mobx-react';
-import { FormEventHandler, Fragment, useEffect, useState } from 'react';
+import { FormEventHandler, Fragment, useCallback, useEffect, useState } from 'react';
 
 const Log = () => {
   const showLog = useObserver(() => logState.showLog);
@@ -13,14 +13,26 @@ const Log = () => {
 
   const descriptionEnabled = useObserver(() => configState.logDescriptionEnabled);
   const resultEnabled = useObserver(() => configState.logResultEnabled);
+  const inputs = useObserver(() => configState.logInputs);
 
   const [log, setLog] = useState(() => currentLog ?? ({} as Log));
   const [showError, setShowError] = useState(false);
 
+  const resetInputErrors = useCallback(() => {
+    const initial = { subject: !currentLog?.subject } as Record<string, boolean>;
+    return inputs.reduce((acc, { name, required }) => {
+      if (required) acc[name] = !currentLog?.inputs?.[name];
+      return acc;
+    }, initial);
+  }, [currentLog, inputs]);
+
+  const [inputErrors, setInputErrors] = useState(resetInputErrors);
+
   useEffect(() => {
     setLog(currentLog ?? ({} as Log));
     setShowError(false);
-  }, [currentLog]);
+    setInputErrors(resetInputErrors());
+  }, [currentLog, resetInputErrors]);
 
   const updateLog = <K extends keyof Log>(key: K, value: Log[K]) => {
     setLog(prevState => {
@@ -28,20 +40,100 @@ const Log = () => {
       return { ...prevState, [key]: value };
     });
 
-    if (showError && key === 'subject' && value) {
-      setShowError(false);
-    }
+    if (key === 'subject') setInputErrors(state => ({ ...state, subject: !value }));
   };
 
   const submit: FormEventHandler = e => {
     e.preventDefault();
 
-    if (!log.subject) {
-      setShowError(true);
+    const hasErrors = Object.values(inputErrors).filter(v => v).length > 0;
+    setShowError(hasErrors);
+
+    if (hasErrors) {
       return;
     }
 
     logState.submitLog();
+  };
+
+  const renderError = (text: string, show: boolean) => {
+    if (!show) return null;
+
+    return <span className="!-mt-1.5 inline-block text-sm text-red-400">{text}</span>;
+  };
+
+  const renderCustomInputs = () => {
+    return inputs.map(input => {
+      const { type, name, required } = input;
+      const label = input.label ?? name;
+
+      const update = (value: string) => {
+        const record = log?.inputs ?? {};
+        updateLog('inputs', { ...record, [name]: value });
+        if (required) setInputErrors(state => ({ ...state, [name]: !value }));
+      };
+
+      const hasError = !!required && !!inputErrors[name] && showError;
+
+      const value = log?.inputs?.[name] ?? '';
+
+      if (type === 'text') {
+        return (
+          <>
+            <input
+              key={name}
+              type="text"
+              value={value}
+              disabled={submitted}
+              placeholder={label}
+              className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
+              onChange={event => update(event.target.value)}
+            />
+            {renderError(`${label} is required`, hasError)}
+          </>
+        );
+      }
+
+      if (type === 'textarea') {
+        return (
+          <>
+            <textarea
+              key={name}
+              value={value}
+              disabled={submitted}
+              placeholder={label}
+              className="block w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
+              onChange={event => update(event.target.value)}
+            />
+            {renderError(`${label} is required`, hasError)}
+          </>
+        );
+      }
+
+      if (type === 'select') {
+        const { options } = input as SelectLogInput;
+        return (
+          <>
+            <select
+              key={name}
+              value={value}
+              disabled={submitted}
+              className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
+              onChange={e => update(e.target.value)}>
+              <option disabled value={''}>
+                Select {label}
+              </option>
+              {options.map(({ label, value }) => (
+                <option key={`${name}-${label}`} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+            {renderError(`You have not selected a ${label}`, hasError)}
+          </>
+        );
+      }
+    });
   };
 
   return (
@@ -76,11 +168,7 @@ const Log = () => {
                 className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
                 onChange={event => updateLog('subject', event.target.value)}
               />
-              {showError && (
-                <span className="!-mt-1.5 inline-block text-sm text-red-400">
-                  Subject cannot be empty
-                </span>
-              )}
+              {renderError('Subject cannot be empty.', showError && inputErrors['subject'])}
               {descriptionEnabled && (
                 <input
                   type="text"
@@ -108,6 +196,7 @@ const Log = () => {
                   onChange={event => updateLog('result', event.target.value)}
                 />
               )}
+              {renderCustomInputs()}
               <button
                 disabled={disableSubmit}
                 type="submit"
