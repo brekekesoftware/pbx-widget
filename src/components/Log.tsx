@@ -11,15 +11,13 @@ const Log = () => {
   const disableSubmit = useObserver(() => !logState.canSubmit);
   const submitted = useObserver(() => logState.submitted);
 
-  const descriptionEnabled = useObserver(() => configState.logDescriptionEnabled);
-  const resultEnabled = useObserver(() => configState.logResultEnabled);
   const inputs = useObserver(() => configState.logInputs);
 
   const [log, setLog] = useState(() => currentLog ?? ({} as Log));
   const [showError, setShowError] = useState(false);
 
   const resetInputErrors = useCallback(() => {
-    const initial = { subject: !currentLog?.subject } as Record<string, boolean>;
+    const initial = {} as Record<string, boolean>;
     return inputs.reduce((acc, { name, required }) => {
       if (required) acc[name] = !currentLog?.inputs?.[name];
       return acc;
@@ -39,8 +37,6 @@ const Log = () => {
       logState.updateLog(key, value);
       return { ...prevState, [key]: value };
     });
-
-    if (key === 'subject') setInputErrors(state => ({ ...state, subject: !value }));
   };
 
   const submit: FormEventHandler = e => {
@@ -62,7 +58,7 @@ const Log = () => {
     return <span className="!-mt-1.5 inline-block text-sm text-red-400">{text}</span>;
   };
 
-  const renderCustomInputs = () => {
+  const renderInputs = () => {
     return inputs.map(input => {
       const { type, name, required } = input;
       const label = input.label ?? name;
@@ -160,43 +156,7 @@ const Log = () => {
           leaveTo="opacity-0 scale-95">
           <div className="absolute inset-x-0 bottom-0 z-50 rounded-sm bg-white p-2 shadow">
             <form onSubmit={submit} className="space-y-2 p-2 pb-6">
-              <input
-                type="text"
-                value={log?.subject ?? ''}
-                disabled={submitted}
-                placeholder="Subject"
-                className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
-                onChange={event => updateLog('subject', event.target.value)}
-              />
-              {renderError('Subject cannot be empty.', showError && inputErrors['subject'])}
-              {descriptionEnabled && (
-                <input
-                  type="text"
-                  value={log?.description ?? ''}
-                  disabled={submitted}
-                  placeholder="Description"
-                  className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
-                  onChange={event => updateLog('description', event.target.value)}
-                />
-              )}
-              <textarea
-                className="block w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
-                placeholder="Comment"
-                disabled={submitted}
-                onChange={event => updateLog('comment', event.target.value)}
-                value={log?.comment ?? ''}
-              />
-              {resultEnabled && (
-                <input
-                  type="text"
-                  value={log?.result ?? ''}
-                  disabled={submitted}
-                  placeholder="Result"
-                  className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
-                  onChange={event => updateLog('result', event.target.value)}
-                />
-              )}
-              {renderCustomInputs()}
+              {renderInputs()}
               <button
                 disabled={disableSubmit}
                 type="submit"

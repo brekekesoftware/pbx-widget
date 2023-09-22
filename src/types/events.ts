@@ -101,7 +101,7 @@ interface LogInput {
   label?: string;
   type: 'text' | 'textarea' | 'select';
   required?: boolean;
-  defaultValue?: string | number;
+  defaultValue?: string | number | ((call: Call) => string);
 }
 
 export interface SelectLogInput extends LogInput {
@@ -111,8 +111,6 @@ export interface SelectLogInput extends LogInput {
 
 export interface Config {
   enableLog?: boolean;
-  enableLogDescription?: boolean;
-  enableLogResult?: boolean;
   logButtonTitle?: string;
   logInputs?: Array<LogInput | SelectLogInput>;
 }
@@ -124,10 +122,6 @@ export type Log = {
     url: string;
   };
   duration: number;
-  subject: string;
-  description: string;
-  comment: string;
-  result: string;
   contactId: string;
   contactType?: string;
   related?: { id: string };

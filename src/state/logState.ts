@@ -32,8 +32,6 @@ export class LogState {
     return !this.savedLogs[id(this.current)] && callsState.callHasEnded(this.current);
   }
 
-  customInputValues?: Log['inputs'];
-
   constructor() {
     makeObservable(this, {
       callsLog: observable,
@@ -56,16 +54,6 @@ export class LogState {
     onLogSavedEvent(this.saveLog);
     onCallRecordedEvent(this.callRecorded);
   }
-
-  defaultCustomInputValues = () => {
-    return (this.customInputValues ??= configState.logInputs.reduce(
-      (object, { name, defaultValue }) => {
-        object[name] = defaultValue ?? '';
-        return object;
-      },
-      {} as Log['inputs'],
-    ));
-  };
 
   open = (call: Call) => {
     this.current = call;
@@ -102,19 +90,26 @@ export class LogState {
     this.callsLog[id] = log;
   };
 
+  defaultCustomInputValues = (call: Call) => {
+    return configState.logInputs.reduce(
+      (object, { name, defaultValue }) => {
+        const value = defaultValue ?? '';
+        object[name] = typeof value === 'function' ? value(call) : value;
+        return object;
+      },
+      {} as Log['inputs'],
+    );
+  };
+
   getLog = (call: Call) => {
     return (this.callsLog[id(call)] ??= {
       call: call,
       duration: 0,
-      subject: `Call on ${new Date(call.createdAt).toUTCString()}`,
-      comment: '',
-      description: '',
-      result: '',
       contactId: callsState.callsContact[id(call)]?.id ?? '',
       contactType: callsState.callsContact[id(call)]?.type,
       tenant: authState.account?.pbxTenant ?? '',
       user: authState.account!.pbxUsername,
-      inputs: this.defaultCustomInputValues(),
+      inputs: this.defaultCustomInputValues(call),
     });
   };
 

@@ -11,14 +11,6 @@ export class ConfigState {
     return this._config?.enableLog ?? true;
   }
 
-  get logDescriptionEnabled() {
-    return this._config?.enableLogDescription ?? false;
-  }
-
-  get logResultEnabled() {
-    return this._config?.enableLogResult ?? true;
-  }
-
   get logButtonTitle() {
     return this._config?.logButtonTitle ?? 'Note';
   }
@@ -27,8 +19,6 @@ export class ConfigState {
     makeObservable(this, {
       _config: observable,
       logEnabled: computed,
-      logDescriptionEnabled: computed,
-      logResultEnabled: computed,
       logButtonTitle: computed,
       config: action,
     });
@@ -38,6 +28,13 @@ export class ConfigState {
     whenDev(() =>
       fireConfigEvent({
         logInputs: [
+          {
+            label: 'Subject',
+            name: 'subject',
+            type: 'text',
+            required: true,
+            defaultValue: call => `Call on ${new Date(call.createdAt).toUTCString()}`,
+          },
           {
             label: 'Description',
             name: 'description',
