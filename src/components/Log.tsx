@@ -70,7 +70,7 @@ const Log = () => {
             <form onSubmit={submit} className="space-y-2 p-2 pb-6">
               <input
                 type="text"
-                value={log?.subject}
+                value={log?.subject ?? ''}
                 disabled={submitted}
                 placeholder="Subject"
                 className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
@@ -84,7 +84,7 @@ const Log = () => {
               {descriptionEnabled && (
                 <input
                   type="text"
-                  value={log?.description}
+                  value={log?.description ?? ''}
                   disabled={submitted}
                   placeholder="Description"
                   className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
@@ -96,12 +96,12 @@ const Log = () => {
                 placeholder="Comment"
                 disabled={submitted}
                 onChange={event => updateLog('comment', event.target.value)}
-                value={log?.comment}
+                value={log?.comment ?? ''}
               />
               {resultEnabled && (
                 <input
                   type="text"
-                  value={log?.result}
+                  value={log?.result ?? ''}
                   disabled={submitted}
                   placeholder="Result"
                   className="w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
