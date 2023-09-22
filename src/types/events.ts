@@ -117,17 +117,14 @@ export interface Config {
 
 export type Log = {
   call: Call;
-  recording?: {
-    id: string;
-    url: string;
-  };
   duration: number;
+  recording?: { id: string; url: string };
+  inputs: Record<string, string | number>;
   contactId: string;
   contactType?: string;
   related?: { id: string };
   tenant: string;
   user: string;
-  inputs: Record<string, string | number>;
 };
 
 export interface CallRecord {
