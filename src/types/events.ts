@@ -125,7 +125,6 @@ export type Log = {
   contactId: string;
   contactType?: string;
   related?: { id: string };
-  relatedRecordId?: string;
   tenant: string;
   user: string;
   inputs: Record<string, string | number>;
