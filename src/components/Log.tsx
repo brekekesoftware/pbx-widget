@@ -55,7 +55,7 @@ const Log = () => {
           leave="ease-in duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0">
-          <div className="absolute inset-0 bg-black/5" onClick={logState.close} />
+          <button className="absolute inset-0 cursor-default bg-black/5" onClick={logState.close} />
         </Transition.Child>
 
         <Transition.Child
