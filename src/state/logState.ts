@@ -79,8 +79,8 @@ export class LogState {
     if (this.callLogSaved(call)) return;
     const log = this.callsLog[id(call)];
     if (log === undefined) return;
-    log.recordId = contact.id;
-    log.recordType = contact.type;
+    log.contactId = contact.id;
+    log.contactType = contact.type;
     this.callsLog[id(call)] = log;
   };
 
@@ -110,8 +110,8 @@ export class LogState {
       comment: '',
       description: '',
       result: '',
-      recordId: callsState.callsContact[id(call)]?.id ?? '',
-      recordType: callsState.callsContact[id(call)]?.type,
+      contactId: callsState.callsContact[id(call)]?.id ?? '',
+      contactType: callsState.callsContact[id(call)]?.type,
       tenant: authState.account?.pbxTenant ?? '',
       user: authState.account!.pbxUsername,
       inputs: this.defaultCustomInputValues(),

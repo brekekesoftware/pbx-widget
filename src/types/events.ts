@@ -128,8 +128,9 @@ export type Log = {
   description: string;
   comment: string;
   result: string;
-  recordId: string;
-  recordType?: string;
+  contactId: string;
+  contactType?: string;
+  related?: { id: string };
   relatedRecordId?: string;
   tenant: string;
   user: string;
