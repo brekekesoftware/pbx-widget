@@ -1,13 +1,12 @@
 import {
   onCallEndedEvent,
   onCallEvent,
-  onCallRecordedEvent,
   onCallUpdatedEvent,
+  onContactSelectedEvent,
   onDuplicateContactCallAnsweredEvent,
   onLogEvent,
   onLoggedInEvent,
   onLoggedOutEvent,
-  onContactSelectedEvent,
 } from '@core/utils/events/listeners';
 import {
   fireCallInfoEvent,
@@ -27,7 +26,6 @@ type WidgetCallbackParams = {
   // Listeners
   onCallEndedEvent: typeof onCallEndedEvent;
   onCallEvent: typeof onCallEvent;
-  onCallRecordedEvent: typeof onCallRecordedEvent;
   onCallUpdatedEvent: typeof onCallUpdatedEvent;
   onDuplicateContactCallAnsweredEvent: typeof onDuplicateContactCallAnsweredEvent;
   onLogEvent: typeof onLogEvent;

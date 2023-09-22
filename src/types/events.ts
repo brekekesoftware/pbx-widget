@@ -119,6 +119,10 @@ export interface Config {
 
 export type Log = {
   call: Call;
+  recording?: {
+    id: string;
+    url: string;
+  };
   duration: number;
   subject: string;
   description: string;

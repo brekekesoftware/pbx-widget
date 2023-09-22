@@ -73,7 +73,6 @@ The callback parameter of the `renderWidget` method exposes a set of event trigg
 - `onCallEvent` - Listener for the call event. The callback is called with the call object as the event parameter.
 - `onCallUpdatedEvent` - Listener for the call updated event. The callback is called with the call object as the event parameter.
 - `onCallEndedEvent` - Listener for the call ended event. The callback is called with the call object as the event parameter.
-- `onCallRecordedEvent` - Listener for the call recorded event. The callback is called with the record object as the event parameter.
 - `onLoggedOutEvent` - Listener for the logged out event.
 - `onLoggedInEvent` - Listener for the logged in event. The callback is called with the account object as the event parameter.
 - `onLogEvent` - Listener for the log event. The callback is called with the log object as the event parameter.

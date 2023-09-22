@@ -54,6 +54,7 @@ export class LogState {
     });
 
     onLogSavedEvent(this.saveLog);
+    onCallRecordedEvent(this.callRecorded);
   }
 
   defaultCustomInputValues = () => {
@@ -81,6 +82,24 @@ export class LogState {
     log.recordId = contact.id;
     log.recordType = contact.type;
     this.callsLog[id(call)] = log;
+  };
+
+  callRecorded = (record: CallRecord) => {
+    const { roomId, recordingId, recordingURL } = record;
+
+    // attach recording to latest call, using this because call backs use same room id.
+    const id = Object.keys(callsState.callsEndedTime)
+      .reverse()
+      .find(k => k.endsWith(roomId));
+
+    logger('callRecorded', record, id);
+
+    if (!id) return;
+
+    const call = callsState.callsRecord[id];
+    const log = this.getLog(call);
+    log.recording = { id: recordingId, url: recordingURL };
+    this.callsLog[id] = log;
   };
 
   getLog = (call: Call) => {
