@@ -98,7 +98,7 @@ const Log = () => {
               value={value}
               disabled={submitted}
               placeholder={label}
-              className="block w-full rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
+              className="block w-full resize-none rounded border border-gray-300 p-2 py-1 disabled:bg-gray-100"
               onChange={event => update(event.target.value)}
             />
             {renderError(`${label} is required`, hasError)}
