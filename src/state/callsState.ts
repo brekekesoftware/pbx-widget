@@ -2,6 +2,7 @@ import { logState } from '@/state/logState';
 import { CallInfo, Contact } from '@/types/events';
 import { Call } from '@/types/phone';
 import { whenDev } from '@/utils/app';
+import { unique, wrap } from '@/utils/array';
 import { id } from '@/utils/call';
 import {
   onCallEndedEvent,
@@ -91,9 +92,11 @@ export class CallsState {
   };
 
   callInfo = (call: Call, info: CallInfo) => {
-    if (this.callsContact[id(call)] !== undefined) return;
-    this.updateCallContact(call, Array.isArray(info) ? info[0] : info);
-    if (Array.isArray(info)) this.contactsRecord[id(call)] = info;
+    const contacts = [...this.callContacts(call), ...wrap(info)];
+    if (this.callsContact[id(call)] === undefined) {
+      this.updateCallContact(call, contacts[0]);
+    }
+    this.contactsRecord[id(call)] = unique(contacts, ({ id, type }) => `${id} - ${type ?? ''}`);
   };
 
   callContacts = (call: Call) => this.contactsRecord[id(call)] ?? [];
