@@ -93,8 +93,14 @@ export class LogState {
   defaultCustomInputValues = (call: Call) => {
     return configState.logInputs.reduce(
       (object, { name, defaultValue }) => {
-        const value = defaultValue ?? '';
-        object[name] = typeof value === 'function' ? value(call) : value;
+        let value = defaultValue ?? '';
+        value = typeof value === 'function' ? value(call) : value;
+
+        if (typeof value === 'string') {
+          value = value.replace('#createdAt', new Date(call.createdAt).toUTCString());
+        }
+
+        object[name] = value;
         return object;
       },
       {} as Log['inputs'],
