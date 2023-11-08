@@ -11,6 +11,7 @@ import {
 import {
   fireCallInfoEvent,
   fireConfigEvent,
+  fireLogFailedEvent,
   fireLogSavedEvent,
   fireMakeCallEvent,
   fireNotification,
@@ -35,6 +36,7 @@ type WidgetCallbackParams = {
   // Triggers
   fireCallInfoEvent: typeof fireCallInfoEvent;
   fireConfigEvent: typeof fireConfigEvent;
+  fireLogFailedEvent: typeof fireLogFailedEvent;
   fireLogSavedEvent: typeof fireLogSavedEvent;
   fireMakeCallEvent: typeof fireMakeCallEvent;
   fireNotification: typeof fireNotification;

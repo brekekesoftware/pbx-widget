@@ -45,6 +45,7 @@ This renders the widget on the given element and calls the callback with a set o
         ({
            fireCallInfoEvent,
            fireConfigEvent,
+           fireLogFailedEvent,
            fireLogSavedEvent,
            fireMakeCallEvent,
            fireNotification,
@@ -70,10 +71,11 @@ This renders the widget on the given element and calls the callback with a set o
 ### 3. Events & Triggers
 The callback parameter of the `renderWidget` method exposes a set of event triggers and listeners which can be used to communicate between the widget and your app.
 
-- `fireCallInfoEvent` - Triggers the `onCallInfoEvent` listener with the call and info objects as the parameters.
-- `fireConfigEvent` - Triggers the `onCallInfoEvent` listener with the config object as the parameters.
-- `fireLogSavedEvent` - Triggers the `onLogSavedEvent` listener with the log object as the parameter.
-- `fireMakeCallEvent` - Triggers the `onMakeCallEvent` listener with the phone number as the parameter.
+- `fireCallInfoEvent` - Update call with user information.
+- `fireConfigEvent` - Configure widget behaviour.
+- `fireLogFailedEvent` - Notify the widget that the log failed to save.
+- `fireLogSavedEvent` - Notify the widget that the log saved successfully.
+- `fireMakeCallEvent` - Start a call to number.
 - `fireNotification` - Display a notification in the widget.
 - `onCallEvent` - Listener for the call event. The callback is called with the call object as the event parameter.
 - `onCallUpdatedEvent` - Listener for the call updated event. The callback is called with the call object as the event parameter.

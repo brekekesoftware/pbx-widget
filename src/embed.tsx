@@ -13,6 +13,7 @@ import {
 import {
   fireCallInfoEvent,
   fireConfigEvent,
+  fireLogFailedEvent,
   fireLogSavedEvent,
   fireMakeCallEvent,
   fireNotification,
@@ -25,6 +26,7 @@ export const embedWidgetRender = () => {
     callback({
       fireCallInfoEvent,
       fireConfigEvent,
+      fireLogFailedEvent,
       fireLogSavedEvent,
       fireMakeCallEvent,
       fireNotification,

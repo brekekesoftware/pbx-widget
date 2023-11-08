@@ -71,6 +71,11 @@ type GlobalEventsMap = {
     details: Log;
     result: boolean | void;
   };
+  'log-failed': {
+    parameters: [log: Log];
+    details: Log;
+    result: boolean | void;
+  };
   config: {
     parameters: [config: Config];
     details: Config;

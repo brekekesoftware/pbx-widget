@@ -5,7 +5,7 @@ import { CallRecord, Contact, Log } from '@/types/events';
 import { Call } from '@/types/phone';
 import { whenDev } from '@/utils/app';
 import { id } from '@/utils/call';
-import { onCallRecordedEvent, onLogSavedEvent } from '@/utils/events/listeners';
+import { onCallRecordedEvent, onLogFailedEvent, onLogSavedEvent } from '@/utils/events/listeners';
 import { fireLogEvent } from '@/utils/events/triggers';
 import { logger } from '@/utils/logger';
 import { action, computed, makeObservable, observable } from 'mobx';
@@ -13,6 +13,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 export class LogState {
   callsLog: Record<string, Log> = {};
   savedLogs: Record<string, boolean> = {};
+  submitting = new Map<string, boolean>();
   current?: Call;
 
   get showLog() {
@@ -27,15 +28,11 @@ export class LogState {
     return this.current && this.savedLogs[id(this.current)];
   }
 
-  get canSubmit() {
-    if (this.current === undefined) return false;
-    return !this.savedLogs[id(this.current)] && callsState.callHasEnded(this.current);
-  }
-
   constructor() {
     makeObservable(this, {
       callsLog: observable,
       savedLogs: observable,
+      submitting: observable,
       current: observable,
       showLog: computed,
       currentLog: computed,
@@ -48,11 +45,20 @@ export class LogState {
       updateLog: action,
       submitLog: action,
       saveLog: action,
+      logFailed: action,
       contactSelected: action,
     });
 
     onLogSavedEvent(this.saveLog);
+    onLogFailedEvent(this.logFailed);
     onCallRecordedEvent(this.callRecorded);
+  }
+
+  get canSubmit() {
+    if (this.current === undefined) return false;
+    const idx = id(this.current);
+    if (this.submitting.get(idx)) return false;
+    return !this.savedLogs[idx] && callsState.callHasEnded(this.current);
   }
 
   open = (call: Call) => {
@@ -128,6 +134,7 @@ export class LogState {
 
   submitLog = () => {
     if (this.current === undefined) return;
+    this.submitting.set(id(this.current), true);
     const log = this.getLog(this.current);
     log.duration = callsState.endedCallDuration(this.current);
     fireLogEvent(log);
@@ -136,11 +143,15 @@ export class LogState {
   };
 
   saveLog = (log: Log) => {
-    this.savedLogs[id(log.call)] = true;
-    if (this.current && id(log.call) === id(this.current)) {
+    const idx = id(log.call);
+    this.savedLogs[idx] = true;
+    this.submitting.set(idx, false);
+    if (this.current && idx === id(this.current)) {
       this.close();
     }
   };
+
+  logFailed = (log: Log) => void this.submitting.set(id(log.call), false);
 
   callLogSaved = (call: Call) => this.savedLogs[id(call)] ?? false;
 

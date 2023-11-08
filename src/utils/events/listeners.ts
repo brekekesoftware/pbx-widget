@@ -18,6 +18,7 @@ export const onCallInfoEvent = createListener('call-info');
 
 export const onLogEvent = createListener('log');
 export const onLogSavedEvent = createListener('log-saved');
+export const onLogFailedEvent = createListener('log-failed');
 
 export const onConfigEvent = createListener('config');
 
