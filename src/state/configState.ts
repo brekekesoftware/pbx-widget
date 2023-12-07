@@ -7,23 +7,17 @@ import { action, computed, makeObservable, observable } from 'mobx';
 export class ConfigState {
   _config?: Config = undefined;
 
-  get logEnabled() {
-    return this._config?.enableLog ?? true;
-  }
-
-  get logButtonTitle() {
-    return this._config?.logButtonTitle ?? 'Note';
-  }
-
   constructor() {
     makeObservable(this, {
       _config: observable,
+      version: computed,
       logEnabled: computed,
       logButtonTitle: computed,
-      config: action,
+      logInputs: computed,
+      update: action,
     });
 
-    onConfigEvent(this.config);
+    onConfigEvent(this.update);
 
     whenDev(() =>
       fireConfigEvent({
@@ -70,11 +64,23 @@ export class ConfigState {
     );
   }
 
+  get version() {
+    return this._config?.version ?? '';
+  }
+
+  get logEnabled() {
+    return this._config?.enableLog ?? true;
+  }
+
+  get logButtonTitle() {
+    return this._config?.logButtonTitle ?? 'Note';
+  }
+
   get logInputs() {
     return this._config?.logInputs ?? [];
   }
 
-  config = (config: Config) => {
+  update = (config: Config) => {
     this._config = config;
   };
 }

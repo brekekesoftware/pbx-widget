@@ -1,9 +1,9 @@
 import KeypadIcon from '@/assets/icons/keypad.svg';
 import logout from '@/assets/icons/logout.png';
 import user from '@/assets/icons/user.png';
-import Logo from '@/assets/images/logo.png';
 import CallLog from '@/components/CallLog';
 import Log from '@/components/Log';
+import Logo from '@/components/Logo';
 import { pbx } from '@/services/pbx';
 import { authState } from '@/state/authState';
 import { onNumberEntry } from '@/utils/events/listeners';
@@ -36,7 +36,7 @@ const Main = () => {
   return (
     <>
       <div className="z-50 flex h-10 items-center justify-between border-b bg-white p-2.5">
-        <img className="h-5" src={Logo} alt="" />
+        <Logo />
         <div className="flex items-center gap-2">
           <div className="flex items-center rounded-full bg-gray-200 p-0.5 pl-2">
             <span className="text-sm font-bold">{account!.pbxUsername}</span>

@@ -118,6 +118,7 @@ export interface Config {
   enableLog?: boolean;
   logButtonTitle?: string;
   logInputs?: Array<LogInput | SelectLogInput>;
+  version?: string;
 }
 
 export type Log = {

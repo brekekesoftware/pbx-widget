@@ -1,4 +1,4 @@
-import Logo from '@/assets/images/logo.png';
+import Logo from '@/components/Logo';
 import { pbx } from '@/services/pbx';
 import { AuthData } from '@/types/app';
 import { FormEventHandler, useState } from 'react';
@@ -21,7 +21,7 @@ const Auth = () => {
   return (
     <>
       <div className="flex h-10 items-center border-b bg-white p-2.5">
-        <img className="h-5" src={Logo} alt="" />
+        <Logo />
       </div>
       <form onSubmit={login} className="space-y-2 p-2 pb-6">
         <input
